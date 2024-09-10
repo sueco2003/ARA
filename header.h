@@ -1,0 +1,46 @@
+//
+// Created by guilh on 10/09/2024.
+//
+
+#ifndef HEADER_H
+#define HEADER_H
+#include <stdbool.h>
+
+struct link {
+    int id;
+    int type;
+    struct link *next;
+};
+
+struct AS {
+    struct link *head;
+};
+
+struct net {
+    int AS;
+    int E;
+    struct AS *adj;
+};
+
+int interface();
+
+void Commercial(struct net *net, int t);
+
+void CommercialCycle(struct net *net);
+
+void CommercialConnected(struct net *net);
+
+void CommercialLengths(struct net *net, int t);
+
+void CommercialLengthsAll(struct net *net);
+
+void ShortestAll(struct net *net);
+
+struct net *OpenFile(const char *filename, struct net *net);
+
+bool createEdge(struct net *net, int source, int destination, int type);
+
+struct link *createAdjacency(int destination, int type);
+
+struct net *createNet();
+#endif HEADER_H
