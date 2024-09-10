@@ -1,0 +1,3 @@
+C:/guilh/Desktop/Escola/IST/ARA/cmake-build-debug/CMakeFiles/ARA.dir
+C:/guilh/Desktop/Escola/IST/ARA/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/guilh/Desktop/Escola/IST/ARA/cmake-build-debug/CMakeFiles/rebuild_cache.dir

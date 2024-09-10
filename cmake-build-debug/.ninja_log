@@ -1,0 +1,8 @@
+# ninja log v6
+3	348	7477126540717711	build.ninja	a45a955ec8933d0b
+37	204	7477120239371938	CMakeFiles/ARA.dir/utils.c.obj	d84df6018a547606
+30	201	7477120239296798	CMakeFiles/ARA.dir/algorithms.c.obj	2f09d57f9bba3bcc
+37	248	7477105020313012	CMakeFiles/ARA.dir/net.c.obj	d101d7215ee46af0
+206	490	7477124774546921	ARA.exe	b9a079f2c914fd92
+18	205	7477124772666839	CMakeFiles/ARA.dir/interface.c.obj	df8ccd9a3fa2b267
+17	238	7477124190943883	CMakeFiles/ARA.dir/main.c.obj	7fe72029ed96061
