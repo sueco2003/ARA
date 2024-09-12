@@ -2,11 +2,12 @@
 // Created by guilh on 10/09/2024.
 //
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "header.h"
 
-#define MAX 65535
+
 
 /**
  * @brief Creates and initializes a network structure.
@@ -24,6 +25,7 @@ struct net *createNet() {
     net->adj = (struct AS *) malloc(MAX * sizeof(struct AS));
     for (int i = 0; i < MAX; i++) {
         net->adj[i].head = NULL;
+        net->adj[i].active = 0;
     }
     return net;
 }
@@ -47,6 +49,7 @@ bool createEdge(struct net *net, int source, int destination, int type) {
 
     struct link *new = createAdjacency(destination, type);
     new->next = net->adj[source].head;
+    net->adj[source].active = 1;
     net->adj[source].head = new;
     net->E++;
 
@@ -74,4 +77,19 @@ struct link *createAdjacency(int destination, int type) {
     temp->type = type;
     temp->next = NULL;
     return temp;
+}
+
+struct net* reverseNet(struct net* network) {
+    struct net* reversed = createNet(network->AS, network->E);
+
+    for (int i = 0; i < network->AS; i++) {
+        struct link* curr = network->adj[i].head;
+        while (curr != NULL) {
+            // Reverse the edge and add to the reversed graph
+            createEdge(reversed, curr->id, i, curr->type);
+            curr = curr->next;
+        }
+    }
+
+    return reversed;
 }

@@ -19,10 +19,14 @@ struct net *OpenFile(const char *filename, struct net *net) {
     FILE *file = NULL;
     int source, destination, type;
     if (!((file = fopen(filename, "r")))) return NULL;
-
     net = createNet();
     while (fscanf(file, "%d %d %d", &source, &destination, &type) == 3) {
         createEdge(net, source, destination, type);
     }
     return net;
+}
+
+void clearInputBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);  // Discard characters until newline or EOF
 }

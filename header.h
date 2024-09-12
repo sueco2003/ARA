@@ -5,7 +5,7 @@
 #ifndef HEADER_H
 #define HEADER_H
 #include <stdbool.h>
-
+#define MAX 65535
 struct link {
     int id;
     int type;
@@ -14,6 +14,7 @@ struct link {
 
 struct AS {
     struct link *head;
+    int active;
 };
 
 struct net {
@@ -43,4 +44,10 @@ bool createEdge(struct net *net, int source, int destination, int type);
 struct link *createAdjacency(int destination, int type);
 
 struct net *createNet();
+void dfs(struct net* network, int node, int prevType, int *visitedLinkType);
+void clearInputBuffer();
+struct net* reverseNet(struct net* network);
+int canAllReachTarget(struct net* network, int targetNode);
+int isValidRoute(int prevType, int currentType);
+
 #endif HEADER_H

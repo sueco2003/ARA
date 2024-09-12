@@ -28,8 +28,9 @@ int main() {
 
         switch (option) {
             case 1:
-                printf("Please insert the net filename and target AS: ");
-                if (fscanf(stdin, "%s\n%d", input, &option) != 2) {
+                printf("Please insert the net filename and target AS:\n");
+            fflush(stdin);
+                if (fscanf(stdin, "%s\n%d", input, &t) != 2) {
                     printf("Please provide the input needed!\n");
                 }
                 if (!((net = OpenFile(input, net)))) {
