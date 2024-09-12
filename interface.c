@@ -1,13 +1,7 @@
-//
-// Created by guilh on 10/09/2024.
-//
-
 #include "header.h"
-
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 /**
  * Displays a menu of algorithm options and prompts the user to select an option.
  * Continues to prompt the user until a valid option is selected.
@@ -25,7 +19,7 @@ int interface() {
         printf("4: COMMERCIALLENGTHS(Net,t)\n");
         printf("5: COMMERCIALLENGTHSALL(Net)\n");
         printf("6: SHORTESTALL(Net)\n\n");
-        printf("Please select an option (Enter -1 to leave):");
+        printf("Please select an option (Enter -1 to leave):\n");
         fflush(stdin);
         fgets(input, sizeof(input), stdin);
         if (sscanf(input, "%d", &option) != 1) {

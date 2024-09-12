@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "header.h"
-
 /**
  * @brief Main entry point of the program that provides an interface to perform various network operations.
  *
@@ -21,15 +19,15 @@
 int main() {
     int option = 0;
     struct net *net = NULL;
-
     while ((option = interface()) != -1) {
         int t = 0;
         char input[100];
 
         switch (option) {
             case 1:
-                printf("Please insert the net filename and target AS: ");
-                if (fscanf(stdin, "%s\n%d", input, &option) != 2) {
+                printf("Please insert the net filename and target AS:\n");
+            fflush(stdin);
+                if (fscanf(stdin, "%s\n%d", input, &t) != 2) {
                     printf("Please provide the input needed!\n");
                 }
                 if (!((net = OpenFile(input, net)))) {
