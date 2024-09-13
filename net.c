@@ -19,13 +19,10 @@
  * @return A pointer to the newly created net structure. The caller is responsible for freeing this memory.
  */
 struct net *createNet() {
-    struct net *net = malloc(sizeof(net));
-    net->AS = MAX;
+    struct net *net = malloc(sizeof(struct net));
     net->E = 0;
-    net->adj = (struct AS *) malloc(MAX * sizeof(struct AS));
     for (int i = 0; i < MAX; i++) {
-        net->adj[i].head = NULL;
-        net->adj[i].active = 0;
+        net->adj[i] = NULL;
     }
     return net;
 }
@@ -47,9 +44,8 @@ bool createEdge(struct net *net, int source, int destination, int type) {
     if (source < 0 || source >= MAX) return false;
 
     struct link *new = createAdjacency(destination, type);
-    new->next = net->adj[source].head;
-    net->adj[source].active = 1;
-    net->adj[source].head = new;
+    new->next = net->adj[source];
+    net->adj[source] = new;
     net->E++;
 
     return true;
@@ -76,10 +72,10 @@ struct link *createAdjacency(int destination, int type) {
 }
 
 struct net* reverseNet(struct net* network) {
-    struct net* reversed = createNet(network->AS, network->E);
+    struct net* reversed = createNet();
 
-    for (int i = 0; i < network->AS; i++) {
-        struct link* curr = network->adj[i].head;
+    for (int i = 0; i < MAX; i++) {
+        struct link* curr = network->adj[i];
         while (curr != NULL) {
             // Reverse the edge and add to the reversed graph
             createEdge(reversed, curr->id, i, curr->type);

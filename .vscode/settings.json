@@ -1,0 +1,16 @@
+{
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/mnt/c/Users/leand/Desktop/ARA-2-Commercial-Algorithm",
+            "binaryPath": "/mnt/c/Users/leand/Desktop/ARA-2-Commercial-Algorithm/ara",
+            "binaryArgs": [
+                "net"
+            ]
+        },
+        {
+            "cwd": "/mnt/c/Users/leand/Desktop/ARA-2-Commercial-Algorithm",
+            "binaryPath": "/mnt/c/Users/leand/Desktop/ARA-2-Commercial-Algorithm/ara",
+            "binaryArgs": []
+        }
+    ]
+}

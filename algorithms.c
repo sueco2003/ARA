@@ -7,25 +7,11 @@
 #include "header.h"
 
 void Commercial(struct net *net, int t) {
-    int start = -1, destination = -1, custom = 0;
-    char buffer[256];
+    canAllReachTarget(net, t);  
+}
 
-    printf("Do you want a custom start or destination node? (1 or 0)\n");
-    if (fscanf(stdin, "%d", &custom) != 1) {
-        printf("Please input a number!\n");
-    }
+void CommercialTest(struct net *net, int s, int t){
 
-    if (custom && scanf("%d\n%d", &start, &destination)) {
-        if (start < -1 || destination < -1) {
-            printf("Invalid input");
-        } else if (start == -1 && destination != -1) {
-            //findPathFromAnyNode(net, destination);
-        } else {
-            //findPathFromSpecificNode(net, start, destination);
-        }
-    } else {
-        canAllReachTarget(net, t);
-    }
 }
 
 void CommercialCycle(struct net *net) {
@@ -74,7 +60,7 @@ void dfs(struct net *network, int node, int prevType, int *visitedLinkType) {
     }
 
     visitedLinkType[node] = prevType; // Mark node as visited
-    struct link *curr = network->adj[node].head;
+    struct link *curr = network->adj[node];
 
     while (curr != NULL) {
         // Perform type-checking rules here:
@@ -93,8 +79,8 @@ int canAllReachTarget(struct net *network, int t) {
     int visitedLinkType[MAX] = {0};
     dfs(network, t, -1, visitedLinkType);
 
-    for (int i = 0; i < network->AS; i++) {
-        if (network->adj[i].active) {
+    for (int i = 0; i < MAX; i++) {
+        if (network->adj[i]!=NULL) {
             if (visitedLinkType[i] == 1) {
                 printf("There is a valid route from node %d to node %d (Provider Path)\n", i, t);
             } else if (visitedLinkType[i] == 2) {

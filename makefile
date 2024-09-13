@@ -4,7 +4,7 @@
 CC = gcc
 
 # Compiler flags
-CFLAGS = -Wall -Wextra -O2
+CFLAGS = -g -Wall -Wextra -O2
 
 # Output executable name
 TARGET = ara

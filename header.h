@@ -6,24 +6,22 @@
 #include <stdbool.h>
 
 #define MAX 65535
+
 struct link {
     int id;
     int type;
     struct link *next;
 };
 
-struct AS {
-    struct link *head;
-    int active;
-};
 
 struct net {
-    int AS;
     int E;
-    struct AS *adj;
+    struct link *adj[MAX];
 };
+
 int interface();
 void Commercial(struct net *net, int t);
+void CommercialTest(struct net *net, int s, int t);
 void CommercialCycle(struct net *net);
 void CommercialConnected(struct net *net);
 void CommercialLengths(struct net *net, int t);

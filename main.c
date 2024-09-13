@@ -16,83 +16,55 @@
  * The program expects user input for filenames and target AS parameters as needed by the selected operations.
  * @return EXIT_SUCCESS if the program completes successfully.
  */
-int main() {
-    int option = 0;
+int main(int argc, char *argv[]) {
+
+
+    if(argc !=2){
+        printf("Invalid inputs\n");
+        exit(1);
+    }
     struct net *net = NULL;
+    if (!((net = OpenFile(argv[1], net)))) {
+        printf("Error opening file\n");
+        exit(1);
+    }
+
+    int option = 0;
     while ((option = interface()) != -1) {
         int t = 0;
+        int s=0;
         char input[100];
 
         switch (option) {
             case 1:
-                printf("Please insert the net filename and target AS:\n");
-            fflush(stdin);
-                if (fscanf(stdin, "%s\n%d", input, &t) != 2) {
+                printf("Please insert the target AS:\n");
+                if (fscanf(stdin, "%d", &t) != 1) {
                     printf("Please provide the input needed!\n");
+                }else{
+                    Commercial(net, t);
                 }
-                if (!((net = OpenFile(input, net)))) {
-                    printf("Error opening file\n");
-                    break;
-                }
-                Commercial(net, t);
                 break;
             case 2:
-                printf("Please insert the net filename: ");
-                fgets(input, sizeof(input), stdin);
-                if (sscanf(input, "%d", &option) != 1) {
+                printf("Please insert the source and destination AS:\n");
+                if (fscanf(stdin, "%d %d", &s, &t) != 1) {
                     printf("Please provide the input needed!\n");
+                }else{
+                    CommercialTest(net, s, t);
                 }
-                if (!((net = OpenFile(input, net)))) {
-                    printf("Error opening file\n");
-                    break;
-                }
-                CommercialCycle(net);
                 break;
             case 3:
-                printf("Please insert the net filename: ");
-                fgets(input, sizeof(input), stdin);
-                if (sscanf(input, "%d", &option) != 1) {
-                    printf("Please provide the input needed!\n");
-                }
-                if (!((net = OpenFile(input, net)))) {
-                    printf("Error opening file\n");
-                    break;
-                }
-                CommercialConnected(net);
+                CommercialCycle(net);
                 break;
             case 4:
-                printf("Please insert the net filename and target AS: ");
-                if (fscanf(stdin, "%s\n%d", input, &option) != 2) {
-                    printf("Please provide the input needed!\n");
-                }
-                if (!((net = OpenFile(input, net)))) {
-                    printf("Error opening file\n");
-                    break;
-                }
-                CommercialLengths(net, t);
+                CommercialConnected(net);
                 break;
             case 5:
-                printf("Please insert the net filename: ");
-                fgets(input, sizeof(input), stdin);
-                if (sscanf(input, "%d", &option) != 1) {
-                    printf("Please provide the input needed!\n");
-                }
-                if (!((net = OpenFile(input, net)))) {
-                    printf("Error opening file\n");
-                    break;
-                }
-                CommercialLengthsAll(net);
+                CommercialLengths(net, t);
                 break;
             case 6:
-                printf("Please insert the net filename: ");
-                fgets(input, sizeof(input), stdin);
-                if (sscanf(input, "%d", &option) != 1) {
-                    printf("Please provide the input needed!\n");
-                }
-                if (!((net = OpenFile(input, net)))) {
-                    printf("Error opening file\n");
-                    break;
-                }
+                CommercialLengthsAll(net);
+                break;
+            case 7:
                 ShortestAll(net);
                 break;
             default: ;

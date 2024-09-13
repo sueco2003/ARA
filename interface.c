@@ -14,17 +14,17 @@ int interface() {
         char input[100];
         printf("Welcome to ARA 24/25 algorithm collection\n\n");
         printf("1: COMMERCIAL(Net,t)\n");
-        printf("2: COMMERCIALCYCLE(Net)\n");
-        printf("3: COMMERCIALCONNECTED(Net) \n");
-        printf("4: COMMERCIALLENGTHS(Net,t)\n");
-        printf("5: COMMERCIALLENGTHSALL(Net)\n");
-        printf("6: SHORTESTALL(Net)\n\n");
+        printf("2: COMMERCIAL(Net,t) [TEST]\n");
+        printf("3: COMMERCIALCYCLE(Net)\n");
+        printf("4: COMMERCIALCONNECTED(Net) \n");
+        printf("5: COMMERCIALLENGTHS(Net,t)\n");
+        printf("6: COMMERCIALLENGTHSALL(Net)\n");
+        printf("7: SHORTESTALL(Net)\n\n");
         printf("Please select an option (Enter -1 to leave):\n");
-        fflush(stdin);
-        fgets(input, sizeof(input), stdin);
-        if (sscanf(input, "%d", &option) != 1) {
+        if (fscanf(stdin, "%d", &option) != 1) {
             printf("Please input a number!\n");
         }
-    } while (option < 1 || option > 6);
+        
+    } while (option < 1 || option > 7);
     return option;
 }
