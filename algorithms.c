@@ -6,15 +6,55 @@
 
 #include "header.h"
 
+int dfs_cycle(struct net *network, int node, int prevNode, int *visitedLinkType) {
+    int cycle=0;
+    visitedLinkType[node] = 1; // Mark node as visited
+    struct link *curr = network->adj[node];
+
+    while (curr != NULL) {
+        if (visitedLinkType[curr->id] == 0) {
+            // Unvisited node
+            cycle=dfs_cycle(network, curr->id, node, visitedLinkType);
+            if (cycle==1) {
+                return 1;  // A valid commercial cycle has been found
+            }
+        }else if(visitedLinkType[curr->id] == 1 && prevNode!=curr->id){
+            return 1;
+        }
+        curr = curr->next;
+    }
+    return 0;
+}
+
+
+
+
 void Commercial(struct net *net, int t) {
     canAllReachTarget(net, t);  
 }
 
 void CommercialTest(struct net *net, int s, int t){
-
+    
 }
 
 void CommercialCycle(struct net *net) {
+
+    int visitedLinkType[MAX] = {0};
+    int t=0;
+    int cycle=0;
+    for(int i=0;i<MAX;i++){
+        if(net->adj[i]!=NULL){
+            t=i;
+            break;
+        }
+    }
+    cycle=dfs_cycle(net, t, -1, visitedLinkType);
+    if(cycle==1){
+        printf("There is at least one cycle in this network\n");
+    }else{
+        printf("There isn't a cycle in this network\n");
+    }
+
 }
 
 void CommercialConnected(struct net *net) {
@@ -53,6 +93,12 @@ void findPathFromAnyNode(struct net *net, int t) {
     }
 }
 */
+
+
+
+
+
+
 
 void dfs(struct net *network, int node, int prevType, int *visitedLinkType) {
     if (visitedLinkType[node] != 0) {
