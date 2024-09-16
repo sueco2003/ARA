@@ -38,5 +38,7 @@ struct net* reverseNet(struct net* network);
 int canAllReachTarget(struct net* network, int targetNode);
 int isValidRoute(int prevType, int currentType);
 int dfs_cycle(struct net *network, int node, int prevType, int *visitedLinkType);
+int isCyclicUtil(struct net *network, int node, int *visited, int *recStack);
+int isCyclic(struct net *net);
 
 #endif HEADER_H
