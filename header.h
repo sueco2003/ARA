@@ -36,9 +36,15 @@ void dfs(struct net* network, int node, int prevType, int *visitedLinkType);
 void clearInputBuffer();
 struct net* reverseNet(struct net* network);
 int canAllReachTarget(struct net* network, int targetNode);
-int isValidRoute(int prevType, int currentType);
+int isInvalidRoute(int prevType, int currentType);
 int dfs_cycle(struct net *network, int node, int prevType, int *visitedLinkType);
 int isCyclicUtil(struct net *network, int node, int *visited, int *recStack);
 int isCyclic(struct net *net);
+void kosaraju(struct net *graph);
+void dfsTransposed(struct net *graph, int v, bool visited[], int prevType);
+void transposeGraph(struct net *graph, struct net *transposed);
+void dfsOriginal(struct net *graph, int v, bool visited[], int *stack, int *stackIndex, int prevType);
+
+
 
 #endif HEADER_H
