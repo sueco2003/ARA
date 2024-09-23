@@ -21,6 +21,7 @@
 struct net *createNet() {
     struct net *net = malloc(sizeof(struct net));
     net->E = 0;
+    net->V = 0;
     for (int i = 0; i < MAX; i++) {
         net->adj[i] = NULL;
     }
@@ -42,6 +43,8 @@ bool createEdge(struct net *net, int source, int destination, int type) {
     if (!net) return false;
     if (destination < 0 || destination >= MAX) return false;
     if (source < 0 || source >= MAX) return false;
+
+    if(net->adj[source]==NULL) net->V++;
 
     struct link *new = createAdjacency(destination, type);
     new->next = net->adj[source];

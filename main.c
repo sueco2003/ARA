@@ -59,7 +59,12 @@ int main(int argc, char *argv[]) {
                 CommercialConnected(net);
                 break;
             case 5:
-                CommercialLengths(net, t);
+                printf("Please insert the target AS:\n");
+                if (fscanf(stdin, "%d", &t) != 1) {
+                    printf("Please provide the input needed!\n");
+                }else{
+                    CommercialLengths(net, t);
+                }
                 break;
             case 6:
                 CommercialLengthsAll(net);

@@ -6,6 +6,7 @@
 #include <stdbool.h>
 
 #define MAX 65535
+#define INF 4294836225L
 
 struct link {
     int id;
@@ -16,7 +17,13 @@ struct link {
 
 struct net {
     int E;
+    int V;
     struct link *adj[MAX];
+};
+
+struct Node {
+    int data;
+    struct Node* next;
 };
 
 int interface();
