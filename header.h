@@ -51,6 +51,7 @@ void kosaraju(struct net *graph);
 void dfsTransposed(struct net *graph, int v, bool visited[], int prevType);
 void transposeGraph(struct net *graph, struct net *transposed);
 void dfsOriginal(struct net *graph, int v, bool visited[], int *stack, int *stackIndex, int prevType);
+void CommercialLengthsTest(struct net *net, int t);
 
 
 

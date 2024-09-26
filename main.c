@@ -67,9 +67,17 @@ int main(int argc, char *argv[]) {
                 }
                 break;
             case 6:
-                CommercialLengthsAll(net);
+                printf("Please insert the target AS:\n");
+                if (fscanf(stdin, "%d", &t) != 1) {
+                    printf("Please provide the input needed!\n");
+                }else{
+                    CommercialLengthsTest(net, t);
+                }
                 break;
             case 7:
+                CommercialLengthsAll(net);
+                break;
+            case 8:
                 ShortestAll(net);
                 break;
             default: ;

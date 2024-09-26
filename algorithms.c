@@ -5,6 +5,106 @@
 
 #include "header.h"
 
+struct MinHeap {
+    int *array;   // Array to store the heap
+    int capacity; // Maximum possible size of the heap
+    int size;     // Current size of the heap
+};
+
+// Function to create a new min-heap
+struct MinHeap* createMinHeap(int capacity) {
+    struct MinHeap* minHeap = (struct MinHeap*)malloc(sizeof(struct MinHeap));
+    minHeap->capacity = capacity;
+    minHeap->size = 0;
+    minHeap->array = (int*)malloc(capacity * sizeof(int));
+    return minHeap;
+}
+
+// Function to get the index of the parent of a node
+int parent(int i) { return (i - 1) / 2; }
+
+// Function to get the index of the left child of a node
+int left(int i) { return (2 * i + 1); }
+
+// Function to get the index of the right child of a node
+int right(int i) { return (2 * i + 2); }
+
+// Function to swap two elements
+void swap(int *x, int *y) {
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+// Function to heapify (bubble down) a subtree with root at index i
+void heapify(struct MinHeap* minHeap, int i) {
+    int smallest = i;      // Initialize smallest as root
+    int l = left(i);       // Left child
+    int r = right(i);      // Right child
+
+    // Check if the left child is smaller than the root
+    if (l < minHeap->size && minHeap->array[l] < minHeap->array[smallest])
+        smallest = l;
+
+    // Check if the right child is smaller than the smallest so far
+    if (r < minHeap->size && minHeap->array[r] < minHeap->array[smallest])
+        smallest = r;
+
+    // If the smallest is not the root, swap and continue heapifying
+    if (smallest != i) {
+        swap(&minHeap->array[i], &minHeap->array[smallest]);
+        heapify(minHeap, smallest);
+    }
+}
+
+// Function to extract the minimum element from the heap
+int extractMin(struct MinHeap* minHeap) {
+    if (minHeap->size <= 0)
+        return MAX;
+    if (minHeap->size == 1) {
+        minHeap->size--;
+        return minHeap->array[0];
+    }
+
+    // Store the minimum value and remove it from the heap
+    int root = minHeap->array[0];
+    minHeap->array[0] = minHeap->array[minHeap->size - 1];
+    minHeap->size--;
+
+    // Restore the heap property by heapifying
+    heapify(minHeap, 0);
+
+    return root;
+}
+
+// Function to insert a new key into the heap
+void insertKey(struct MinHeap* minHeap, int key) {
+    if (minHeap->size == minHeap->capacity) {
+        printf("Overflow: Could not insert key\n");
+        return;
+    }
+
+    // Insert the new key at the end
+    int i = minHeap->size;
+    minHeap->array[i] = key;
+    minHeap->size++;
+
+    // Fix the min-heap property by "bubbling up"
+    while (i != 0 && minHeap->array[parent(i)] > minHeap->array[i]) {
+        swap(&minHeap->array[i], &minHeap->array[parent(i)]);
+        i = parent(i);
+    }
+}
+
+
+
+
+
+
+int isInvalidRoute(const int prevType, const int currentType) {
+    return prevType != -1 && (prevType < currentType || (prevType == 2 && currentType == 2));
+}
+
 void appendNode(struct Node** head, int vertex) {
     // Allocate memory for the new node
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
@@ -55,7 +155,7 @@ int removeTypeNode(struct net *network, struct Node** list, int *visitedLinkType
     int minType=-2;
 
     if (current == NULL) {
-        return NULL;
+        return -1;
     }
 
     // Traverse the linked list of the vertex
@@ -179,113 +279,162 @@ int isValidRoute(const int prevType, const int currentType) {
     return prevType != -1 && (prevType <currentType || (prevType == 2 && currentType == 2));
 }
 
-void dijkstra_lenght(struct net *graph, int src) {
-    long dist[MAX];     // Distance array to hold shortest distances from src
-    int visited[MAX];  // Array to track visited vertices
+
+
+
+
+
+bool removeTypeDistanceNode(struct net *network, struct Node** list, long *dist, int *currentVertex){
+    struct Node* current = *list;
+    struct Node* previous = *list;
+    struct Node* nodeV;
+    struct Node* previousV;
+    int vertice;
+    int minType=-2;
+
+    if (current == NULL) {
+        return false;
+    }
+
+    // Traverse the linked list of the vertex
+    while (current != NULL) {
+        if (dist[current->data]> minType) {
+            minType = dist[current->data];
+            vertice= current->data;
+            previousV=previous;
+            nodeV=current;
+        }
+        previous=current;
+        current = current->next;
+    }
+    removeCurrentNode(list,previousV,nodeV);
+    (*currentVertex)=vertice;
+    return true;
+}
+
+void dijkstra_lenght(struct net *graph, int src, long *dist, int *prev) {
+        
     int type[MAX];    //tracks types
+
+    struct Node* list_type1 = NULL;
+    struct Node* list_type2 = NULL;
+    struct Node* list_type3 = NULL;
 
     // Initialize all distances to infinity and visited[] to false
     for (int i = 0; i < MAX; i++) {
         if(graph->adj[i]!=NULL){
             dist[i] = INF;
-            visited[i] = 0;
-        }else{
-            visited[i] = -1;
+            type[i] = 0;
+            prev[i] =-1;
         }
     }
-
     dist[src] = 0;
     type[src] = -1;
+    appendNode(&list_type3,src);
+    int currentVertex;
 
-    // Process all vertices
-    for (int count = 0; count < graph->V; count++) {
-        int u = min_distance(dist, visited);
-        visited[u] = 1;
-
-        struct link *pCrawl = graph->adj[u];
-        while (pCrawl != NULL) {
-            int v = pCrawl->id;
-            
-            if(visited[v]  && !isValidRoute(type[u], pCrawl->type)){
-                if(type[u]<type[v]){
-                    dist[v] = dist[u] + 1;
-                    type[v] = type[u];  
+    while (list_type3 != NULL || list_type2!=NULL || list_type1!=NULL) {
+        // Remove the first vertex from the list
+        if(!removeTypeDistanceNode(graph, &list_type3, dist, &currentVertex)){
+            if(!removeTypeDistanceNode(graph, &list_type2, dist, &currentVertex)){
+                removeTypeDistanceNode(graph, &list_type1, dist, &currentVertex);
+            }
+        }
+        // Explore all the adjacent vertices
+        struct link* temp = graph->adj[currentVertex];
+        while (temp) {
+            int adjV = temp->id;
+            if(!isInvalidRoute(type[currentVertex],temp->type)){
+                if (temp->type>type[adjV] && type[adjV]!=-1) {
+                    type[adjV] = temp->type;
+                    dist[adjV] = dist[currentVertex] +1;
+                    prev[adjV]= currentVertex;
+                    
+                    switch (temp->type)
+                    {
+                    case 1:
+                        appendNode(&list_type1,adjV);
+                        break;
+                    case 2:
+                        appendNode(&list_type2,adjV);
+                        break;
+                    case 3:
+                        appendNode(&list_type3,adjV);
+                        break;
+                    
+                    default:
+                        break;
+                    }
+                }else if(temp->type==type[adjV] && dist[adjV]>dist[currentVertex]+1){
+                    dist[adjV]=dist[currentVertex]+1;
+                    prev[adjV]= currentVertex;
                 }
             }
-            
-            if (!visited[v]  && !isValidRoute(type[u], pCrawl->type)) {
-                dist[v] = dist[u] + 1;
-                if(type[u]==-1){
-                    type[v] = pCrawl->type;
-                }else{
-                    type[v]=type[u];
-                }       
-            }
-            pCrawl = pCrawl->next;
+            temp = temp->next;
         }
-    }
-
-    printf("Vertex   Distance from Source\n");
-    for (int i = 0; i < MAX; i++) {
-        if(graph->adj[i]!=NULL){
-            printf("%d \t\t %ld\n", i, dist[i]);
-        }
-        
     }
 
 }
 
 
-/*
-void dijkstra_shortest_path(struct net *graph, int src) {
-    long dist[MAX];     // Distance array to hold shortest distances from src
-    int visited[MAX];  // Array to track visited vertices
-    int type[MAX];    //tracks types
 
-    // Initialize all distances to infinity and visited[] to false
-    for (int i = 0; i < MAX; i++) {
-        if(graph->adj[i]!=NULL){
-            dist[i] = INF;
-            visited[i] = 0;
-        }else{
-            visited[i] = -1;
-        }
-    }
-
-    dist[src] = 0;
-    type[src] = -1;
-
-    // Process all vertices
-    for (int count = 0; count < graph->V; count++) {
-        int u = min_distance(dist, visited);
-        visited[u] = 1;
-
-        struct link *pCrawl = graph->adj[u];
-        while (pCrawl != NULL) {
-            int v = pCrawl->id;
-            if (!visited[v] && dist[u] + 1 < dist[v] && !isInvalidRoute(type[u], pCrawl->type)) {
-                dist[v] = dist[u] + 1;
-                type[v] = type[u];
-            }
-
-            pCrawl = pCrawl->next;
-        }
-    }
-
-    // Print the calculated shortest distances
-    printf("Vertex   Distance from Source\n");
-    for (int i = 0; i < MAX; i++) {
-        if(graph->adj[i]!=NULL){
-            printf("%d \t\t %ld\n", i, dist[i]);
-        }
-        
-    }
-}
-*/
 void CommercialLengths(struct net *net, int t) {
 
-  
-    dijkstra_lenght(net, t);
+    long dist[MAX];
+    int prev[MAX];
+    dijkstra_lenght(net, t, dist, prev);
+    printf("Vertex   Distance from Source    Path\n");
+    for (int i = 0; i < MAX; i++) {
+        if(net->adj[i]!=NULL){
+            if(dist[i]==INF){
+                printf("%d \t\t Invalid \n", i);
+            }else{
+                printf("%d \t\t %ld \t\t ", i, dist[i]);
+                int node=i;
+                printf("%d", node);
+                while(prev[node]!=-1){
+                    node=prev[node];
+                    printf("-%d", node);
+                }
+                printf("\n");
+            }
+            
+        }
+        
+    }
+
+}
+
+void CommercialLengthsTest(struct net *net, int t) {
+
+    long dist[MAX];
+    int prev[MAX];
+    dijkstra_lenght(net, t, dist, prev);
+
+    int s=0;
+    while(1){
+        printf("Please insert the source AS or -1 to exit:\n");
+        if (fscanf(stdin, "%d", &s) != 1) {
+            printf("Please provide the input needed!\n");
+        }else{
+            if(s==-1){
+                break;
+            }
+            printf("Vertex   Distance from Source    Path\n");
+            if(dist[s]==INF){
+                printf("%d \t\t Invalid \n", s);
+            }else{
+                printf("%d \t\t %ld \t\t ", s, dist[s]);
+                int node=s;
+                printf("%d", node);
+                while(prev[node]!=-1){
+                    node=prev[node];
+                    printf("-%d", node);
+                }
+                printf("\n");
+            }
+        }
+    }
 
 }
 
@@ -295,34 +444,7 @@ void CommercialLengthsAll(struct net *net) {
 void ShortestAll(struct net *net) {
 }
 
-// Option 1: Find a path from any node to the destination node
-/*
-void findPathFromAnyNode(struct net *net, int t) {
-    int visited[MAX] = {0}; // Initialize visited array
-    // Try starting from every node in the graph
-    for (int i = 0; i < MAX; i++) {
-        if (net->adj[i]->active) {
-            printf("id: %d\n", i);
-            // Call DFS for every node, considering it as a potential start node
-            int dfsResult = DFS(net, i, -1, t, visited);
-            if (dfsResult == 1) {
-                printf("There is a valid route from node %d to node %d (Provider Path)\n", i, t);
-            } else if (dfsResult == 2) {
-                printf("There is a valid route from node %d to node %d (Peer-to-peer Path)\n", i, t);
-            } else if (dfsResult == 3) {
-                printf("There is a valid route from node %d to node %d Customer Path)\n", i, t);
-            } else {
-                printf("There is not a valid route from node %d to node %d\n", i, t);
-            }
-            memset(visited, 0, sizeof(visited));
-        }
-    }
-}
-*/
 
-int isInvalidRoute(const int prevType, const int currentType) {
-    return prevType != -1 && (prevType < currentType || (prevType == 2 && currentType == 2));
-}
 
 void dfs(struct net *network, int node, int prevType, int *visitedLinkType) {
     if (visitedLinkType[node] != 0) {
