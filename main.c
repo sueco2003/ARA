@@ -17,9 +17,7 @@
  * @return EXIT_SUCCESS if the program completes successfully.
  */
 int main(int argc, char *argv[]) {
-
-
-    if(argc !=2){
+    if (argc != 2) {
         printf("Invalid inputs\n");
         exit(1);
     }
@@ -32,7 +30,7 @@ int main(int argc, char *argv[]) {
     int option = 0;
     while ((option = interface()) != -1) {
         int t = 0;
-        int s=0;
+        int s = 0;
         char input[100];
 
         switch (option) {
@@ -40,7 +38,7 @@ int main(int argc, char *argv[]) {
                 printf("Please insert the target AS:\n");
                 if (fscanf(stdin, "%d", &t) != 1) {
                     printf("Please provide the input needed!\n");
-                }else{
+                } else {
                     Commercial(net, t);
                 }
                 break;
@@ -48,7 +46,7 @@ int main(int argc, char *argv[]) {
                 printf("Please insert the source and destination AS:\n");
                 if (fscanf(stdin, "%d %d", &s, &t) != 1) {
                     printf("Please provide the input needed!\n");
-                }else{
+                } else {
                     CommercialTest(net, s, t);
                 }
                 break;
@@ -59,20 +57,25 @@ int main(int argc, char *argv[]) {
                 CommercialConnected(net);
                 break;
             case 5:
+                CommercialAll(net);
+                break;
+            case 6:
                 printf("Please insert the target AS:\n");
                 if (fscanf(stdin, "%d", &t) != 1) {
                     printf("Please provide the input needed!\n");
-                }else{
+                } else {
                     CommercialLengths(net, t);
                 }
                 break;
-            case 6:
+            case 7:
                 CommercialLengthsAll(net);
                 break;
-            case 7:
+            case 8:
                 ShortestAll(net);
                 break;
-            default: ;
+            default:
+                freeNet(net);
+                return 0;
         }
     }
     return EXIT_SUCCESS;

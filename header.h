@@ -39,6 +39,7 @@ bool createEdge(struct net *net, int source, int destination, int type);
 struct link *createAdjacency(int destination, int type);
 
 struct net *createNet();
+void CommercialAll(struct net *net);
 void dfs(struct net* network, int node, int prevType, int *visitedLinkType);
 void clearInputBuffer();
 struct net* reverseNet(struct net* network);
@@ -50,6 +51,9 @@ int isCyclic(struct net *net);
 void kosaraju(struct net *graph);
 void dfsTransposed(struct net *graph, int v, bool visited[], int prevType);
 void transposeGraph(struct net *graph, struct net *transposed);
+void printPath(int node, int *parent);
+void freeNet(struct net *net);
+void bfs(struct net *network, int node, int *visitedLinkType, int *parent);
 void dfsOriginal(struct net *graph, int v, bool visited[], int *stack, int *stackIndex, int prevType);
 
 

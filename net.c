@@ -88,3 +88,22 @@ struct net* reverseNet(struct net* network) {
 
     return reversed;
 }
+
+void freeNet(struct net *net) {
+    if (net == NULL) {
+        return;  // Nothing to free if net is NULL
+    }
+
+    // Free each adjacency list
+    for (int i = 0; i < MAX; i++) {
+        struct link *current = net->adj[i];
+        while (current != NULL) {
+            struct link *temp = current;  // Save the current node
+            current = current->next;      // Move to the next node
+            free(temp);                   // Free the saved node
+        }
+    }
+
+    // Free the network structure itself
+    free(net);
+}

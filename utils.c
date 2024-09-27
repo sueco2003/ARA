@@ -24,5 +24,6 @@ struct net *OpenFile(const char *filename, struct net *net) {
     while (fscanf(file, "%d %d %d", &source, &destination, &type) == 3) {
         createEdge(net, source, destination, type);
     }
+    fclose(file);
     return net;
 }
