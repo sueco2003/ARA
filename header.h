@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 #define MAX 65535
-#define INF 4294836225L
+#define INF 65536
 
 struct link {
     int id;

@@ -281,10 +281,36 @@ int isValidRoute(const int prevType, const int currentType) {
 
 
 
+int removeNode(struct net *network, struct Node** list, int node){
+    struct Node* current = *list;
+    struct Node* previous = *list;
+    struct Node* nodeV;
+    struct Node* previousV;
+    int vertice;
+    int minType=-2;
+
+    if (current == NULL) {
+        return NULL;
+    }
+
+    // Traverse the linked list of the vertex
+    while (current != NULL) {
+        if (node== current->data) {
+            minType = node;
+            vertice= current->data;
+            previousV=previous;
+            nodeV=current;
+            break;
+        }
+        previous=current;
+        current = current->next;
+    }
+    removeCurrentNode(list,previousV,nodeV);
+    return NULL;
+}
 
 
-
-bool removeTypeDistanceNode(struct net *network, struct Node** list, long *dist, int *currentVertex){
+bool removeTypeDistanceNode(struct net *network, struct Node** list, int *dist, int *currentVertex){
     struct Node* current = *list;
     struct Node* previous = *list;
     struct Node* nodeV;
@@ -312,15 +338,14 @@ bool removeTypeDistanceNode(struct net *network, struct Node** list, long *dist,
     return true;
 }
 
-void dijkstra_lenght(struct net *graph, int src, long *dist, int *prev) {
+void dijkstra_lenght(struct net *graph, int src, int *dist, int *prev) {
         
-    int type[MAX];    //tracks types
+    int type[MAX];    
 
     struct Node* list_type1 = NULL;
     struct Node* list_type2 = NULL;
     struct Node* list_type3 = NULL;
 
-    // Initialize all distances to infinity and visited[] to false
     for (int i = 0; i < MAX; i++) {
         if(graph->adj[i]!=NULL){
             dist[i] = INF;
@@ -344,8 +369,30 @@ void dijkstra_lenght(struct net *graph, int src, long *dist, int *prev) {
         struct link* temp = graph->adj[currentVertex];
         while (temp) {
             int adjV = temp->id;
+            if(prev[currentVertex]==adjV){
+                temp = temp->next;
+                continue;
+            }
             if(!isInvalidRoute(type[currentVertex],temp->type)){
                 if (temp->type>type[adjV] && type[adjV]!=-1) {
+                    
+                    if(type[adjV]!=0){
+                        switch (type[adjV])
+                        {
+                        case 1:
+                            removeNode(graph, &list_type1, adjV);
+                            break;
+                        case 2:
+                            removeNode(graph, &list_type2, adjV);
+                            break;
+                        case 3:
+                            removeNode(graph, &list_type3, adjV);
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                    
                     type[adjV] = temp->type;
                     dist[adjV] = dist[currentVertex] +1;
                     prev[adjV]= currentVertex;
@@ -380,7 +427,7 @@ void dijkstra_lenght(struct net *graph, int src, long *dist, int *prev) {
 
 void CommercialLengths(struct net *net, int t) {
 
-    long dist[MAX];
+    int dist[MAX];
     int prev[MAX];
     dijkstra_lenght(net, t, dist, prev);
     printf("Vertex   Distance from Source    Path\n");
@@ -389,7 +436,7 @@ void CommercialLengths(struct net *net, int t) {
             if(dist[i]==INF){
                 printf("%d \t\t Invalid \n", i);
             }else{
-                printf("%d \t\t %ld \t\t ", i, dist[i]);
+                printf("%d \t\t %d \t\t ", i, dist[i]);
                 int node=i;
                 printf("%d", node);
                 while(prev[node]!=-1){
@@ -407,7 +454,7 @@ void CommercialLengths(struct net *net, int t) {
 
 void CommercialLengthsTest(struct net *net, int t) {
 
-    long dist[MAX];
+    int dist[MAX];
     int prev[MAX];
     dijkstra_lenght(net, t, dist, prev);
 
@@ -424,7 +471,7 @@ void CommercialLengthsTest(struct net *net, int t) {
             if(dist[s]==INF){
                 printf("%d \t\t Invalid \n", s);
             }else{
-                printf("%d \t\t %ld \t\t ", s, dist[s]);
+                printf("%d \t\t %d \t\t ", s, dist[s]);
                 int node=s;
                 printf("%d", node);
                 while(prev[node]!=-1){
@@ -439,6 +486,39 @@ void CommercialLengthsTest(struct net *net, int t) {
 }
 
 void CommercialLengthsAll(struct net *net) {
+    int total_lengths[MAX]={0};
+    int total_count=0;
+    int dist[MAX];
+    int prev[MAX];
+    int max_length=0;
+    for(int i=0;i<MAX;i++){
+        if(net->adj[i]!=NULL){
+            dijkstra_lenght(net, i, dist, prev);
+            for (int j = 0; j < MAX; j++) {
+                if (dist[j] != INF && dist[j] != 0) {  // Exclude unreachable nodes and the source itself
+                    int length = dist[j];
+
+                    total_lengths[length]++;
+                    total_count++;
+                    if(max_length<length){
+                        max_length=length;
+                    }
+                }
+            }
+        } 
+    }
+    float ccdf;
+    long total=total_count;
+    for(int i=1;i<=max_length;i++){
+        if(total_lengths[i]!=0){
+            total=total-total_lengths[i];
+            ccdf = (float)total / (float)total_count;
+            printf("Length: %d, CCDF: %.6f, Amount: %d\n", i, ccdf, total_lengths[i]);
+        }
+        
+    }
+
+    
 }
 
 void ShortestAll(struct net *net) {
