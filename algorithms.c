@@ -316,7 +316,7 @@ bool removeTypeDistanceNode(struct net *network, struct Node** list, int *dist, 
     struct Node* nodeV;
     struct Node* previousV;
     int vertice;
-    int minType=-2;
+    int minType=INF;
 
     if (current == NULL) {
         return false;
@@ -324,7 +324,7 @@ bool removeTypeDistanceNode(struct net *network, struct Node** list, int *dist, 
 
     // Traverse the linked list of the vertex
     while (current != NULL) {
-        if (dist[current->data]> minType) {
+        if (dist[current->data]< minType) {
             minType = dist[current->data];
             vertice= current->data;
             previousV=previous;
@@ -415,7 +415,9 @@ void dijkstra_lenght(struct net *graph, int src, int *dist, int *prev) {
                 }else if(temp->type==type[adjV] && dist[adjV]>dist[currentVertex]+1){
                     dist[adjV]=dist[currentVertex]+1;
                     prev[adjV]= currentVertex;
+                    
                 }
+
             }
             temp = temp->next;
         }
