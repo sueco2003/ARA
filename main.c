@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
                 if (fscanf(stdin, "%d", &t) != 1) {
                     printf("Please provide the input needed!\n");
                 } else {
-                    Commercial(net, t);
+                    Commercial(net, t, 0);
                 }
                 break;
             case 2:

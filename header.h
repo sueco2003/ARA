@@ -27,10 +27,10 @@ struct Node {
 };
 
 int interface();
-void Commercial(struct net *net, int t);
+int *Commercial(const struct net *network, const int t, int option);
 void CommercialTest(struct net *net, int s, int t);
-void CommercialCycle(struct net *net);
-void CommercialConnected(struct net *net);
+int CommercialCycle(struct net *net);
+int CommercialConnected(struct net *net);
 void CommercialLengths(struct net *net, int t);
 void CommercialLengthsAll(struct net *net);
 void ShortestAll(struct net *net);
@@ -44,7 +44,7 @@ void dfs(struct net* network, int node, int prevType, int *visitedLinkType);
 void clearInputBuffer();
 struct net* reverseNet(struct net* network);
 int canAllReachTarget(struct net* network, int targetNode);
-int isInvalidRoute(int prevType, int currentType);
+int isValidRoute(int prevType, int currentType);
 int dfs_cycle(struct net *network, int node, int prevType, int *visitedLinkType);
 int isCyclicUtil(struct net *network, int node, int *visited, int *recStack);
 int isCyclic(struct net *net);
