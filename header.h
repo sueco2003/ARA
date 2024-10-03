@@ -37,7 +37,7 @@ void ShortestAll(struct net *net);
 struct net *OpenFile(const char *filename, struct net *net);
 bool createEdge(struct net *net, int source, int destination, int type);
 struct link *createAdjacency(int destination, int type);
-
+//
 struct net *createNet();
 void CommercialAll(struct net *net);
 void dfs(struct net* network, int node, int prevType, int *visitedLinkType);

@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
         int t = 0;
         int s = 0;
         char input[100];
-
+//
         switch (option) {
             case 1:
                 printf("Please insert the target AS:\n");

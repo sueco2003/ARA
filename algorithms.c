@@ -252,7 +252,7 @@ void dijkstra_lenght(struct net *graph, int src) {
             visited[i] = -1;
         }
     }
-
+//
     dist[src] = 0;
     type[src] = -1;
 
