@@ -1,13 +1,7 @@
-//
-// Created by guilh on 10/09/2024.
-//
-
 #include "header.h"
-
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 /**
  * Displays a menu of algorithm options and prompts the user to select an option.
  * Continues to prompt the user until a valid option is selected.
@@ -20,17 +14,18 @@ int interface() {
         char input[100];
         printf("Welcome to ARA 24/25 algorithm collection\n\n");
         printf("1: COMMERCIAL(Net,t)\n");
-        printf("2: COMMERCIALCYCLE(Net)\n");
-        printf("3: COMMERCIALCONNECTED(Net) \n");
-        printf("4: COMMERCIALLENGTHS(Net,t)\n");
-        printf("5: COMMERCIALLENGTHSALL(Net)\n");
-        printf("6: SHORTESTALL(Net)\n\n");
-        printf("Please select an option (Enter -1 to leave):");
-        fflush(stdin);
-        fgets(input, sizeof(input), stdin);
-        if (sscanf(input, "%d", &option) != 1) {
+        printf("2: COMMERCIAL(Net,t) [TEST]\n");
+        printf("3: COMMERCIALCYCLE(Net)\n");
+        printf("4: COMMERCIALCONNECTED(Net) \n");
+        printf("5: COMMERCIALLENGTHS(Net,t)\n");
+        printf("6: COMMERCIALLENGTHS(Net,t) [TEST]\n");
+        printf("7: COMMERCIALLENGTHSALL(Net)\n");
+        printf("8: SHORTESTALL(Net)\n\n");
+        printf("Please select an option (Enter -1 to leave):\n");
+        if (fscanf(stdin, "%d", &option) != 1) {
             printf("Please input a number!\n");
         }
-    } while (option < 1 || option > 6);
+        
+    } while (option < 1 || option > 8);
     return option;
 }

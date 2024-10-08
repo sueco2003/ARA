@@ -1,12 +1,13 @@
-//
 // Created by guilh on 10/09/2024.
 //
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "header.h"
 
 #define MAX 65535
+
 
 /**
  * @brief Creates and initializes a network structure.
@@ -18,16 +19,14 @@
  * @return A pointer to the newly created net structure. The caller is responsible for freeing this memory.
  */
 struct net *createNet() {
-    struct net *net = malloc(sizeof(net));
-    net->AS = MAX;
+    struct net *net = malloc(sizeof(struct net));
     net->E = 0;
-    net->adj = (struct AS *) malloc(MAX * sizeof(struct AS));
+    net->V = 0;
     for (int i = 0; i < MAX; i++) {
-        net->adj[i].head = NULL;
+        net->adj[i] = NULL;
     }
     return net;
 }
-
 /**
  * @brief Creates an edge in the network structure.
  *
@@ -45,14 +44,15 @@ bool createEdge(struct net *net, int source, int destination, int type) {
     if (destination < 0 || destination >= MAX) return false;
     if (source < 0 || source >= MAX) return false;
 
+    if(net->adj[source]==NULL) net->V++;
+
     struct link *new = createAdjacency(destination, type);
-    new->next = net->adj[source].head;
-    net->adj[source].head = new;
+    new->next = net->adj[source];
+    net->adj[source] = new;
     net->E++;
 
     return true;
 }
-
 /**
  * @brief Creates an adjacency link to a destination.
  *
@@ -66,12 +66,25 @@ bool createEdge(struct net *net, int source, int destination, int type) {
  *         The caller is responsible for freeing this memory.
  */
 struct link *createAdjacency(int destination, int type) {
-
     struct link *temp = malloc(sizeof(struct link));
     if (!temp) return NULL;
-
     temp->id = destination;
     temp->type = type;
     temp->next = NULL;
     return temp;
+}
+
+struct net* reverseNet(struct net* network) {
+    struct net* reversed = createNet();
+
+    for (int i = 0; i < MAX; i++) {
+        struct link* curr = network->adj[i];
+        while (curr != NULL) {
+            // Reverse the edge and add to the reversed graph
+            createEdge(reversed, curr->id, i, curr->type);
+            curr = curr->next;
+        }
+    }
+
+    return reversed;
 }
