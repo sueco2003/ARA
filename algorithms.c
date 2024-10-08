@@ -599,11 +599,11 @@ void CommercialLengthsTest(struct net *net, int t) {
 }
 
 void CommercialLengthsAll(struct net *net) {
-    int total_lengths[MAX]={0};
-    int total_count=0;
+    long total_lengths[MAX]={0};
+    long total_count=0;
     int dist[MAX];
     int prev[MAX];
-    int max_length=0;
+    long max_length=0;
     for(int i=0;i<MAX;i++){
         if(net->adj[i]!=NULL){
             printf("%d\n",i);
@@ -624,13 +624,13 @@ void CommercialLengthsAll(struct net *net) {
         } 
     }
     
-    float ccdf;
+    double ccdf;
     long total=total_count;
     for(int i=1;i<=max_length;i++){
         if(total_lengths[i]!=0){
             total=total-total_lengths[i];
-            ccdf = (float)total / (float)total_count;
-            printf("Length: %d, CCDF: %.6f, Amount: %d\n", i, ccdf, total_lengths[i]);
+            ccdf = ((float)total / (float)total_count)*100;
+            printf("Length: %d, CCDF: %.6f%%, Amount: %ld\n", i, ccdf, total_lengths[i]);
         }
         
     }
@@ -678,7 +678,7 @@ void appendNode_H_T(struct Node** head, struct Node** tail, int value) {
     }
 }
 
-void bfs_shortestAll(struct net *network, int node, int *dist, int *visited, int *total_lengths, int *total) {
+void bfs_shortestAll(struct net *network, int node, int *dist, int *visited, int *total_lengths, long *total) {
 
     struct Node* head = NULL; 
     struct Node* tail = NULL;       
@@ -717,7 +717,7 @@ void ShortestAll(struct net *net) {
     int dist[MAX];
     int visited[MAX];
     int total_lengths[MAX]={0};
-    int total=0;
+    long total=0;
 
     for(int i=0; i<MAX;i++){
         if(net->adj[i]!=NULL){
@@ -727,10 +727,12 @@ void ShortestAll(struct net *net) {
     }
 
     double percentage;
+    long total_count=total;
     for(int i=0;i<MAX;i++){
         if(total_lengths[i]!=0){
-            percentage = (double)total_lengths[i] / (double)total;
-            printf("Length: %d, Percentage: %.6f, Amount: %d\n", i, percentage, total_lengths[i]);
+            total=total-total_lengths[i];
+            percentage = ((float)total / (float)total_count)*100;
+            printf("Length: %d, CCDF: %.6f%%, Amount: %d\n", i, percentage, total_lengths[i]);
         }
         
     }
