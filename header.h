@@ -1,11 +1,12 @@
 //
 // Created by guilh on 10/09/2024.
 //
-#ifndef HEADER_H
+#pragma once
+
 #define HEADER_H
 #include <stdbool.h>
 
-#define MAX 65535
+#define MAX 65636 // In case there are 100 cycles MAX
 #define INF 4294836225L
 
 struct link {
@@ -17,7 +18,7 @@ struct link {
 
 struct net {
     int E;
-    int V;
+    long long V;
     struct link *adj[MAX];
 };
 
@@ -26,36 +27,38 @@ struct Node {
     struct Node* next;
 };
 
+extern bool isCyclic, isStronglyConnected;
+
 int interface();
-int *Commercial(const struct net *network, const int t, int option);
-void CommercialTest(struct net *net, int s, int t);
-int CommercialCycle(struct net *net);
-int CommercialConnected(struct net *net);
-void CommercialLengths(struct net *net, int t);
-void CommercialLengthsAll(struct net *net);
-void ShortestAll(struct net *net);
-struct net *OpenFile(const char *filename, struct net *net);
-bool createEdge(struct net *net, int source, int destination, int type);
-struct link *createAdjacency(int destination, int type);
-//
+
+
+
+// Network related methods
 struct net *createNet();
-void CommercialAll(struct net *net);
-void dfs(struct net* network, int node, int prevType, int *visitedLinkType);
-void clearInputBuffer();
-struct net* reverseNet(struct net* network);
-int canAllReachTarget(struct net* network, int targetNode);
-int isValidRoute(int prevType, int currentType);
-int dfs_cycle(struct net *network, int node, int prevType, int *visitedLinkType);
-int isCyclicUtil(struct net *network, int node, int *visited, int *recStack);
-int isCyclic(struct net *net);
-void kosaraju(struct net *graph);
-void dfsTransposed(struct net *graph, int v, bool visited[], int prevType);
-void transposeGraph(struct net *graph, struct net *transposed);
-void printPath(int node, int *parent);
+void createEdge(struct net *net, int source, int destination, int type);
+void removeEdge(struct net *network, int source, int destination);
 void freeNet(struct net *net);
-void bfs(struct net *network, int node, int *visitedLinkType, int *parent);
-void dfsOriginal(struct net *graph, int v, bool visited[], int *stack, int *stackIndex, int prevType);
+
+// Utility methods
+struct net *OpenFile(const char *filename, struct net *net);
+int isValidRoute(int prevType, int currentType);
+
+// Commercial related methods
+int *Commercial(const struct net *network, int t, int option);
+void appendNode(struct Node **head, int vertex, const int *visitedLinkType);
+int removeNode(struct Node **head);
+void printPath(int node, const int *parent);
+void CommercialAll(const struct net *network);
+
+// CommercialCycle related methods
+void findStronglyConnectedComponentsUtil(struct net *network, int v);
+void findStronglyConnectedComponents(struct net *network);
+void cycleRefactor(struct net *network);
+void printPath(int node, const int *parent);
+void CommercialCycle();
+
+// CommercialConnected related methods
+void connectAnalysis(const struct net *net);
+void CommercialConnected();
 
 
-
-#endif HEADER_H

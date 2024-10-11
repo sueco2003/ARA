@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
 #include "header.h"
 /**
  * @brief Main entry point of the program that provides an interface to perform various network operations.
@@ -30,48 +32,45 @@ int main(int argc, char *argv[]) {
     int option = 0;
     while ((option = interface()) != -1) {
         int t = 0;
-        int s = 0;
-        char input[100];
-//
+
         switch (option) {
             case 1:
                 printf("Please insert the target AS:\n");
                 if (fscanf(stdin, "%d", &t) != 1) {
                     printf("Please provide the input needed!\n");
                 } else {
+                    clock_t before = clock();
                     Commercial(net, t, 0);
+                    clock_t after = clock(); // Get the time after the function call
+                    int msec = (after - before) * 1000 / CLOCKS_PER_SEC; // Convert time to milliseconds
+                    printf("Time taken: %d minutes %d seconds %d milliseconds\n",
+                           msec / 60000, (msec / 1000) % 60, msec % 1000);
                 }
                 break;
             case 2:
-                printf("Please insert the source and destination AS:\n");
-                if (fscanf(stdin, "%d %d", &s, &t) != 1) {
-                    printf("Please provide the input needed!\n");
-                } else {
-                    CommercialTest(net, s, t);
-                }
+                CommercialCycle();
                 break;
             case 3:
-                CommercialCycle(net);
+                CommercialConnected();
                 break;
             case 4:
-                CommercialConnected(net);
+                clock_t before = clock();
+                CommercialAll(net);
+                clock_t after = clock(); // Get the time after the function call
+                int msec = (after - before) * 1000 / CLOCKS_PER_SEC; // Convert time to milliseconds
+                printf("Time taken: %d minutes %d seconds %d milliseconds\n",
+                       msec / 60000, (msec / 1000) % 60, msec % 1000);
                 break;
             case 5:
-                CommercialAll(net);
-                break;
-            case 6:
                 printf("Please insert the target AS:\n");
                 if (fscanf(stdin, "%d", &t) != 1) {
                     printf("Please provide the input needed!\n");
                 } else {
-                    CommercialLengths(net, t);
                 }
                 break;
-            case 7:
-                CommercialLengthsAll(net);
+            case 6:
                 break;
-            case 8:
-                ShortestAll(net);
+            case 7:
                 break;
             default:
                 freeNet(net);

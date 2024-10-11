@@ -6,9 +6,6 @@
 
 #include "header.h"
 
-#define MAX 65535
-
-
 /**
  * @brief Creates and initializes a network structure.
  *
@@ -39,20 +36,33 @@ struct net *createNet() {
  * @param type The type of the edge.
  * @return True if the edge was successfully created, otherwise false.
  */
-bool createEdge(struct net *net, int source, int destination, int type) {
-    if (!net) return false;
-    if (destination < 0 || destination >= MAX) return false;
-    if (source < 0 || source >= MAX) return false;
 
-    if(net->adj[source]==NULL) net->V++;
+void createEdge(struct net *network, int source, int destination, int type) {
+    struct link *newLink = malloc(sizeof(struct link));
+    if (network->adj[source]==NULL) {
+        network->V++;
+    }
+    network->E++;
+    newLink->id = destination;
+    newLink->type = type;
+    newLink->next = network->adj[source];
+    network->adj[source] = newLink;
 
-    struct link *new = createAdjacency(destination, type);
-    new->next = net->adj[source];
-    net->adj[source] = new;
-    net->E++;
-
-    return true;
 }
+
+void removeEdge(struct net *network, int source, int destination) {
+    struct link **curr = &network->adj[source];
+    while (*curr != NULL) {
+        if ((*curr)->id == destination) {
+            struct link *toRemove = *curr;
+            *curr = (*curr)->next;
+            free(toRemove);
+            break;
+        }
+        curr = &(*curr)->next;
+    }
+}
+
 /**
  * @brief Creates an adjacency link to a destination.
  *
@@ -65,29 +75,7 @@ bool createEdge(struct net *net, int source, int destination, int type) {
  * @return A pointer to the newly created link structure, or NULL if memory allocation fails.
  *         The caller is responsible for freeing this memory.
  */
-struct link *createAdjacency(int destination, int type) {
-    struct link *temp = malloc(sizeof(struct link));
-    if (!temp) return NULL;
-    temp->id = destination;
-    temp->type = type;
-    temp->next = NULL;
-    return temp;
-}
 
-struct net* reverseNet(struct net* network) {
-    struct net* reversed = createNet();
-
-    for (int i = 0; i < MAX; i++) {
-        struct link* curr = network->adj[i];
-        while (curr != NULL) {
-            // Reverse the edge and add to the reversed graph
-            createEdge(reversed, curr->id, i, curr->type);
-            curr = curr->next;
-        }
-    }
-
-    return reversed;
-}
 
 void freeNet(struct net *net) {
     if (net == NULL) {

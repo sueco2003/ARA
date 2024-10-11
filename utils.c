@@ -1,11 +1,5 @@
-//
-// Created by guilh on 10/09/2024.
-//
-
 #include "header.h"
-
 #include <stdio.h>
-
 
 /**
  * Opens a file and reads network data into a net structure.
@@ -24,6 +18,19 @@ struct net *OpenFile(const char *filename, struct net *net) {
     while (fscanf(file, "%d %d %d", &source, &destination, &type) == 3) {
         createEdge(net, source, destination, type);
     }
+    findStronglyConnectedComponents(net);
+    connectAnalysis(net);
     fclose(file);
     return net;
+}
+
+/**
+ * By knowing the previous path type, it calculates whether a link is valid or not
+ *
+ * @param prevType Type of path that has lead to the current node.
+ * @param currentType Type of path that is about to be checked to go on
+ * @return An integer corresponding to the type of path to follow if valid, or 0 otherwise.
+ */
+int isValidRoute(const int prevType, const int currentType) {
+    return prevType == -1 || prevType == 0 || prevType == 3 || currentType == 1 ? currentType : 0;
 }
