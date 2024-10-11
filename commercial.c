@@ -47,31 +47,59 @@ int *Commercial(const struct net *network, const int start, int option) {
     }
 
     while (option != -1) {
-        printf("Please select an AS to see more information (Enter -1 to leave):\n");
-        if (fscanf(stdin, "%d", &option) != 1) {
-            printf("Please input a number!\n");
-        }
-        if (network->adj[option] != NULL) {
-            if (start == option) {
-                printf("The route from %d to %d is itself: %d\n", option, start, option);
-            } else if (visitedLinkType[option] == 2) {
-                printf("There is a valid route from node %d to node %d (Peer-to-peer Path): ", option, start);
-                printPath(option, parent);
-                printf("\n");
-            } else if (visitedLinkType[option] == 3) {
-                printf("There is a valid route from node %d to node %d (Customer Path): ", option, start);
-                printPath(option, parent);
-                printf("\n");
-            } else if (visitedLinkType[option] == 1 || isStronglyConnected) {
-                printf("There is a valid route from node %d to node %d (Provider Path): ", option, start);
-                printPath(option, parent);
-                printf("\n");
-            } else {
-                printf("There is not a valid route from node %d to node %d\n", option, start);
-            }
-            printf("\n");
-        }
+    printf("Please select an AS to see more information (Enter -2 to see all) or (Enter -1 to leave):\n");
+    if (fscanf(stdin, "%d", &option) != 1) {
+        printf("Please input a number!\n");
     }
+
+    if (option == -2) {
+        // Iterate through all nodes in the network
+        printf("\n");
+        for (int i = 0; i < MAX; i++) {
+            if (network->adj[i] != NULL) {
+                printf("Information for node %d:\n", i);
+                if (start == i) {
+                    printf("The route from %d to %d is itself: %d\n", i, start, i);
+                } else if (visitedLinkType[i] == 2) {
+                    printf("There is a valid route from node %d to node %d (Peer-to-peer Path): ", i, start);
+                    printPath(i, parent);
+                    printf("\n");
+                } else if (visitedLinkType[i] == 3) {
+                    printf("There is a valid route from node %d to node %d (Customer Path): ", i, start);
+                    printPath(i, parent);
+                    printf("\n");
+                } else if (visitedLinkType[i] == 1 || isStronglyConnected) {
+                    printf("There is a valid route from node %d to node %d (Provider Path): ", i, start);
+                    printPath(i, parent);
+                    printf("\n");
+                } else {
+                    printf("There is not a valid route from node %d to node %d\n", i, start);
+                }
+                printf("\n");
+            }
+        }
+    } else if (network->adj[option] != NULL) {
+        printf("\n");
+        if (start == option) {
+            printf("The route from %d to %d is itself: %d\n", option, start, option);
+        } else if (visitedLinkType[option] == 2) {
+            printf("There is a valid route from node %d to node %d (Peer-to-peer Path): ", option, start);
+            printPath(option, parent);
+            printf("\n");
+        } else if (visitedLinkType[option] == 3) {
+            printf("There is a valid route from node %d to node %d (Customer Path): ", option, start);
+            printPath(option, parent);
+            printf("\n");
+        } else if (visitedLinkType[option] == 1 || isStronglyConnected) {
+            printf("There is a valid route from node %d to node %d (Provider Path): ", option, start);
+            printPath(option, parent);
+            printf("\n");
+        } else {
+            printf("There is not a valid route from node %d to node %d\n", option, start);
+        }
+        printf("\n");
+    }
+}
 
     return visitedLinkType; // Return the dynamically allocated array
 }

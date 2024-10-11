@@ -3,7 +3,7 @@
 #include "header.h"
 
 bool isCyclic;
-int index = 0;
+int indexFlag = 0;
 int indices[MAX], lowLink[MAX], onStack[MAX], stack[MAX], stackTop = -1;
 int sccCount = 0;
 int sccId[MAX]; // To store which SCC each node belongs to
@@ -33,9 +33,9 @@ int isNodeInCycle[MAX]; // Array para marcar os nós que pertencem a ciclos
  * @return void
  */
 void findStronglyConnectedComponentsUtil(struct net *network, int v) {
-    indices[v] = index;
-    lowLink[v] = index;
-    index++;
+    indices[v] = indexFlag;
+    lowLink[v] = indexFlag;
+    indexFlag++;
     stack[++stackTop] = v;
     onStack[v] = 1;
 
