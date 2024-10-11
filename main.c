@@ -40,12 +40,12 @@ int main(int argc, char *argv[]) {
                 if (fscanf(stdin, "%d", &t) != 1) {
                     printf("Please provide the input needed!\n");
                 } else {
-                    clock_t before = clock();
+                    clock_t before1 = clock();
                     Commercial(net, t, 0);
-                    clock_t after = clock(); // Get the time after the function call
-                    int msec = (after - before) * 1000 / CLOCKS_PER_SEC; // Convert time to milliseconds
+                    clock_t after1 = clock(); // Get the time after the function call
+                    int msec1 = (after1 - before1) * 1000 / CLOCKS_PER_SEC; // Convert time to milliseconds
                     printf("Time taken: %d minutes %d seconds %d milliseconds\n",
-                           msec / 60000, (msec / 1000) % 60, msec % 1000);
+                           msec1 / 60000, (msec1 / 1000) % 60, msec1 % 1000);
                 }
                 break;
             case 2:
@@ -55,12 +55,12 @@ int main(int argc, char *argv[]) {
                 CommercialConnected();
                 break;
             case 4:
-                clock_t before = clock();
+                clock_t before4 = clock();
                 CommercialAll(net);
-                clock_t after = clock(); // Get the time after the function call
-                int msec = (after - before) * 1000 / CLOCKS_PER_SEC; // Convert time to milliseconds
+                clock_t after4 = clock(); // Get the time after the function call
+                int msec4 = (after4 - before4) * 1000 / CLOCKS_PER_SEC; // Convert time to milliseconds
                 printf("Time taken: %d minutes %d seconds %d milliseconds\n",
-                       msec / 60000, (msec / 1000) % 60, msec % 1000);
+                       msec4 / 60000, (msec4 / 1000) % 60, msec4 % 1000);
                 break;
             case 5:
                 printf("Please insert the target AS:\n");
@@ -79,20 +79,20 @@ int main(int argc, char *argv[]) {
                 }
                 break;
             case 7:
-                clock_t before = clock();
+                clock_t before7 = clock();
                 CommercialLengthsAll(net2);
-                clock_t after = clock(); // Get the time after the function call
-                int msec = (after - before) * 1000 / CLOCKS_PER_SEC; // Convert time to milliseconds
+                clock_t after7 = clock(); // Get the time after the function call
+                int msec7 = (after7 - before7) * 1000 / CLOCKS_PER_SEC; // Convert time to milliseconds
                 printf("Time taken: %d minutes %d seconds %d milliseconds\n",
-                       msec / 60000, (msec / 1000) % 60, msec % 1000);
+                       msec7 / 60000, (msec7 / 1000) % 60, msec7 % 1000);
                 break;
             case 8:
-                clock_t before = clock();
+                clock_t before8 = clock();
                 ShortestAll(net2);
-                clock_t after = clock(); // Get the time after the function call
-                int msec = (after - before) * 1000 / CLOCKS_PER_SEC; // Convert time to milliseconds
+                clock_t after8 = clock(); // Get the time after the function call
+                int msec8 = (after8 - before8) * 1000 / CLOCKS_PER_SEC; // Convert time to milliseconds
                 printf("Time taken: %d minutes %d seconds %d milliseconds\n",
-                       msec / 60000, (msec / 1000) % 60, msec % 1000);
+                       msec8 / 60000, (msec8 / 1000) % 60, msec8 % 1000);
                 break;
             default:
                 freeNet(net);
