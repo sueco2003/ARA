@@ -24,7 +24,8 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
     struct net *net = NULL;
-    if (!((net = OpenFile(argv[1], net)))) {
+    struct net *net2 = NULL;
+    if (!((net = OpenFile(argv[1], net,&net2)))) {
         printf("Error opening file\n");
         exit(1);
     }
@@ -65,15 +66,27 @@ int main(int argc, char *argv[]) {
                 printf("Please insert the target AS:\n");
                 if (fscanf(stdin, "%d", &t) != 1) {
                     printf("Please provide the input needed!\n");
-                } else {
+                }else{
+                    CommercialLengths(net2, t);
                 }
                 break;
             case 6:
+                printf("Please insert the target AS:\n");
+                if (fscanf(stdin, "%d", &t) != 1) {
+                    printf("Please provide the input needed!\n");
+                }else{
+                    CommercialLengthsTest(net2, t);
+                }
                 break;
             case 7:
+                CommercialLengthsAll(net2);
+                break;
+            case 8:
+                ShortestAll(net2);
                 break;
             default:
                 freeNet(net);
+                freeNet(net2);
                 return 0;
         }
     }

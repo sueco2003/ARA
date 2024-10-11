@@ -40,7 +40,7 @@ void removeEdge(struct net *network, int source, int destination);
 void freeNet(struct net *net);
 
 // Utility methods
-struct net *OpenFile(const char *filename, struct net *net);
+struct net *OpenFile(const char *filename, struct net *net,struct net **net2);
 int isValidRoute(int prevType, int currentType);
 
 // Commercial related methods
@@ -60,5 +60,13 @@ void CommercialCycle();
 // CommercialConnected related methods
 void connectAnalysis(const struct net *net);
 void CommercialConnected();
+
+//ShortestALL
+void ShortestAll(struct net *net);
+
+
+void CommercialLengths(struct net *net, int t);
+void CommercialLengthsTest(struct net *net, int t);
+void CommercialLengthsAll(struct net *net);
 
 

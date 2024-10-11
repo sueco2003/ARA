@@ -17,8 +17,9 @@ int interface() {
         printf("3: COMMERCIALCONNECTED(Net) \n");
         printf("4: COMMERCIALALL(Net) \n");
         printf("5: COMMERCIALLENGTHS(Net,t)\n");
-        printf("6: COMMERCIALLENGTHSALL(Net)\n");
-        printf("7: SHORTESTALL(Net)\n\n");
+        printf("6: COMMERCIALLENGTHS(Net,t) [TEST]\n");
+        printf("7: COMMERCIALLENGTHSALL(Net)\n");
+        printf("8: SHORTESTALL(Net)\n\n");
         printf("Please select an option (Enter -1 to leave):\n");
         if (fscanf(stdin, "%d", &option) != 1) {
             printf("Please input a number!\n");
@@ -27,6 +28,6 @@ int interface() {
             return 0;
         }
         
-    } while (option < 1 || option > 7);
+    } while (option < 1 || option > 8);
     return option;
 }

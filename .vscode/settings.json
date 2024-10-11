@@ -4,13 +4,20 @@
             "cwd": "/mnt/c/Users/leand/Desktop/ARA-2-Commercial-Algorithm",
             "binaryPath": "/mnt/c/Users/leand/Desktop/ARA-2-Commercial-Algorithm/ara",
             "binaryArgs": [
-                "net"
+                "2009"
             ]
         },
         {
             "cwd": "/mnt/c/Users/leand/Desktop/ARA-2-Commercial-Algorithm",
             "binaryPath": "/mnt/c/Users/leand/Desktop/ARA-2-Commercial-Algorithm/ara",
             "binaryArgs": []
+        },
+        {
+            "cwd": "/mnt/c/Users/leand/Desktop/proj/ARA",
+            "binaryPath": "/mnt/c/Users/leand/Desktop/proj/ARA/ara",
+            "binaryArgs": [
+                "2009"
+            ]
         }
     ]
 }

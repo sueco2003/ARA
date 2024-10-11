@@ -4,7 +4,7 @@
 CC = gcc
 
 # Compiler flags
-CFLAGS = -Ofast -march=native -funroll-loops -flto -fprefetch-loop-arrays
+CFLAGS = -g -Ofast -march=native -funroll-loops -flto -fprefetch-loop-arrays
 
 # Output executable name
 TARGET = ara

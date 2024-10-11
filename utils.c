@@ -8,15 +8,17 @@
  * @param net Pointer to a net structure where the network data will be stored.
  * @return A pointer to the net structure with the loaded data, or NULL if the file could not be opened.
  */
-struct net *OpenFile(const char *filename, struct net *net) {
+struct net *OpenFile(const char *filename, struct net *net, struct net **net2) {
 
     FILE *file = NULL;
     int source, destination, type;
     if (!((file = fopen(filename, "r")))) return NULL;
 
     net = createNet();
+    (*net2) =createNet();
     while (fscanf(file, "%d %d %d", &source, &destination, &type) == 3) {
         createEdge(net, source, destination, type);
+        createEdge((*net2), source, destination, type);
     }
     findStronglyConnectedComponents(net);
     connectAnalysis(net);
