@@ -181,7 +181,7 @@ int isInvalidRoute(const int prevType, const int currentType) {
     return prevType != -1 && (prevType < currentType || (prevType == 2 && currentType == 2));
 }
 
-void dijkstra_lenght(struct net *graph, int src, int *dist, int *prev) {
+void dijkstra_lenght(struct net *graph, int src, long *dist, long *prev) {
         
     int type[MAX]; 
     int processed[MAX];   
@@ -303,8 +303,8 @@ void CommercialLengths(struct net *net, int t) {
         printf("There is no destination %d\n",t);
         return;
     }
-    int dist[MAX];
-    int prev[MAX];
+    long dist[MAX];
+    long prev[MAX];
     dijkstra_lenght(net, t, dist, prev);  
     printf("Vertex   Distance from Source    Path\n");
     for (int i = 0; i < MAX; i++) {
@@ -312,7 +312,7 @@ void CommercialLengths(struct net *net, int t) {
             if(dist[i]==INF){
                 printf("%d \t\t Invalid \n", i);
             }else{
-                printf("%d \t\t %d \t\t ", i, dist[i]);
+                printf("%d \t\t %ld \t\t ", i, dist[i]);
                 int node=i;
                 printf("%d", node);
                 while(prev[node]!=-1){
@@ -330,8 +330,8 @@ void CommercialLengths(struct net *net, int t) {
 
 void CommercialLengthsTest(struct net *net, int t) {
 
-    int dist[MAX];
-    int prev[MAX];
+    long dist[MAX];
+    long prev[MAX];
     dijkstra_lenght(net, t, dist, prev);
 
     int s=0;
@@ -347,7 +347,7 @@ void CommercialLengthsTest(struct net *net, int t) {
             if(dist[s]==INF){
                 printf("%d \t\t Invalid \n", s);
             }else{
-                printf("%d \t\t %d \t\t ", s, dist[s]);
+                printf("%d \t\t %ld \t\t ", s, dist[s]);
                 int node=s;
                 printf("%d", node);
                 while(prev[node]!=-1){
@@ -364,8 +364,8 @@ void CommercialLengthsTest(struct net *net, int t) {
 void CommercialLengthsAll(struct net *net) {
     long total_lengths[MAX]={0};
     long total_count=0;
-    int dist[MAX];
-    int prev[MAX];
+    long dist[MAX];
+    long prev[MAX];
     long max_length=0;
     for(int i=0;i<MAX;i++){
         if(net->adj[i]!=NULL){

@@ -52,7 +52,7 @@ void CommercialAll(const struct net *network);
 
 // CommercialCycle related methods
 void findStronglyConnectedComponentsUtil(struct net *network, int v);
-void findStronglyConnectedComponents(struct net *network);
+void findStronglyConnectedComponents(struct net *network,bool print);
 void cycleRefactor(struct net *network);
 void printPath(int node, const int *parent);
 void CommercialCycle();

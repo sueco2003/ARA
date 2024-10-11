@@ -79,10 +79,20 @@ int main(int argc, char *argv[]) {
                 }
                 break;
             case 7:
+                clock_t before = clock();
                 CommercialLengthsAll(net2);
+                clock_t after = clock(); // Get the time after the function call
+                int msec = (after - before) * 1000 / CLOCKS_PER_SEC; // Convert time to milliseconds
+                printf("Time taken: %d minutes %d seconds %d milliseconds\n",
+                       msec / 60000, (msec / 1000) % 60, msec % 1000);
                 break;
             case 8:
+                clock_t before = clock();
                 ShortestAll(net2);
+                clock_t after = clock(); // Get the time after the function call
+                int msec = (after - before) * 1000 / CLOCKS_PER_SEC; // Convert time to milliseconds
+                printf("Time taken: %d minutes %d seconds %d milliseconds\n",
+                       msec / 60000, (msec / 1000) % 60, msec % 1000);
                 break;
             default:
                 freeNet(net);

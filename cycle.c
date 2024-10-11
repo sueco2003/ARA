@@ -85,7 +85,7 @@ void findStronglyConnectedComponentsUtil(struct net *network, int v) {
  * @return void
  */
 
-void findStronglyConnectedComponents(struct net *network) {
+void findStronglyConnectedComponents(struct net *network, bool print) {
     isCyclic = 0;
     for (int i = 0; i < MAX; i++) {
         indices[i] = -1;
@@ -100,9 +100,10 @@ void findStronglyConnectedComponents(struct net *network) {
             findStronglyConnectedComponentsUtil(network, i);
         }
     }
-
-    printf("tem %d ciclos\n", sccCount);
-    printf("\n");
+    if(print){
+        printf("tem %d ciclos\n", sccCount);
+        printf("\n");
+    }
 
     if (isCyclic) {
         cycleRefactor(network);

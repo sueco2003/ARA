@@ -12,6 +12,7 @@ struct net *OpenFile(const char *filename, struct net *net, struct net **net2) {
 
     FILE *file = NULL;
     int source, destination, type;
+    bool print=false;
     if (!((file = fopen(filename, "r")))) return NULL;
 
     net = createNet();
@@ -20,7 +21,7 @@ struct net *OpenFile(const char *filename, struct net *net, struct net **net2) {
         createEdge(net, source, destination, type);
         createEdge((*net2), source, destination, type);
     }
-    findStronglyConnectedComponents(net);
+    findStronglyConnectedComponents(net,print);
     connectAnalysis(net);
     fclose(file);
     return net;
