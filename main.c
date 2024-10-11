@@ -40,6 +40,10 @@ int main(int argc, char *argv[]) {
                 if (fscanf(stdin, "%d", &t) != 1) {
                     printf("Please provide the input needed!\n");
                 } else {
+                    if(net2->adj[t]==NULL){
+                        printf("%d is not a possible destination\n",t);
+                        continue;
+                    }
                     clock_t before1 = clock();
                     Commercial(net, t, 0);
                     clock_t after1 = clock(); // Get the time after the function call
