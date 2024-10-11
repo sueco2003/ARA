@@ -8,7 +8,6 @@ struct MinHeapNode {
     int distance;  // The distance value
 };
 
-// Define the MinHeap structure with a static array
 struct MinHeap {
     struct MinHeapNode array[MAX];  // Static array to store the heap
     int size;                       // Current size of the heap
@@ -75,8 +74,6 @@ void bubbleUp(struct MinHeap* minHeap, int i) {
 // Function to extract the node with the minimum distance from the heap
 bool extractMin(struct MinHeap* minHeap, int *currentV) {
     if (minHeap->size <= 0) {
-        // Return a dummy node with maximum distance if heap is empty
-        
         return false;
     }
 
@@ -89,10 +86,10 @@ bool extractMin(struct MinHeap* minHeap, int *currentV) {
     // Store the minimum value and remove it from the heap
     struct MinHeapNode root = minHeap->array[0];
     minHeap->array[0] = minHeap->array[minHeap->size - 1];
-    minHeap->position[minHeap->array[0].node] = 0;  // Update the position of the last node
+    minHeap->position[minHeap->array[0].node] = 0; 
     minHeap->size--;
 
-    // Restore the heap property by heapifying
+    // Restore the heap property
     heapify(minHeap, 0);
 
     (*currentV)= root.node;
@@ -151,6 +148,7 @@ void updateKey(struct MinHeap* minHeap, int node, int newDistance) {
     }
 }
 
+//Deletes a node from the heap
 void deleteNode(struct MinHeap* minHeap, int node) {
     // Get the index of the node to be deleted
     int i = minHeap->position[node];
@@ -177,10 +175,22 @@ void deleteNode(struct MinHeap* minHeap, int node) {
     }
 }
 
+//Checks if a route is valid
 int isInvalidRoute(const int prevType, const int currentType) {
     return prevType != -1 && (prevType < currentType || (prevType == 2 && currentType == 2));
 }
 
+
+
+/**
+ * Using the Dijkstras algorithm, it calculates the length from a destination node to all nodes by the prefered type
+ *
+ * @param network A pointer to the network with loaded data.
+ * @param src The AS that serves as destination for the algorithm execution
+ * @param dist Vector with the distances of each node to the source node
+ * @param prev Vector with the previous node from the current one
+ * @return void
+ */
 void dijkstra_lenght(struct net *graph, int src, long *dist, long *prev) {
         
     int type[MAX]; 
@@ -296,6 +306,13 @@ void dijkstra_lenght(struct net *graph, int src, long *dist, long *prev) {
 
 
 
+/**
+ * Using the Dijkstras algorithm, it calculates the length from a destination node to all nodes by the prefered type
+ * and prints the distance and path from the destination node
+ * @param network A pointer to the network with loaded data.
+ * @param t The AS that serves as destination for the algorithm execution
+ * @return void
+ */
 void CommercialLengths(struct net *net, int t) {
 
 
@@ -328,6 +345,13 @@ void CommercialLengths(struct net *net, int t) {
 
 }
 
+/**
+ * Using the Dijkstras algorithm, it calculates the length from a destination node to all nodes by the prefered type
+ * and prints the distance and path from the a source to the destination node
+ * @param network A pointer to the network with loaded data.
+ * @param t The AS that serves as destination for the algorithm execution
+ * @return void
+ */
 void CommercialLengthsTest(struct net *net, int t) {
 
     if(net->adj[t]==NULL){
@@ -369,6 +393,13 @@ void CommercialLengthsTest(struct net *net, int t) {
 
 }
 
+
+/**
+ * Using the Dijkstras algorithm, it calculates the length from a all node to all nodes by the prefered type
+ * and prints the statistics of the paths
+ * @param network A pointer to the network with loaded data.
+ * @return void
+ */
 void CommercialLengthsAll(struct net *net) {
     long total_lengths[MAX]={0};
     long total_count=0;
@@ -388,7 +419,6 @@ void CommercialLengthsAll(struct net *net) {
             for (int j = 0; j < MAX; j++) {
                 if (dist[j] != INF && dist[j] != 0) {  // Exclude unreachable nodes and the source itself
                     int length = dist[j];
-
                     total_lengths[length]++;
                     total_count++;
                     if(max_length<length){
@@ -399,7 +429,7 @@ void CommercialLengthsAll(struct net *net) {
             
         } 
     }
-    
+    //Statistics
     double ccdf;
     long total=total_count;
     for(int i=1;i<=max_length;i++){

@@ -3,6 +3,7 @@
 
 #include "header.h"
 
+//Creates a new node
 struct Node* createNode(int data) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = data;
@@ -10,12 +11,13 @@ struct Node* createNode(int data) {
     return newNode;
 }
 
-
+//Inserts a new node in the begining of a list
 void insertAtBeginning(struct Node** head, int data) {
     struct Node* newNode = createNode(data);
     *head = newNode;
 }
 
+//removes the first node of the list
 int removeHead(struct Node** head, struct Node** tail) {
     int data;
     if (*head == NULL) {
@@ -37,7 +39,7 @@ int removeHead(struct Node** head, struct Node** tail) {
     return data;
 }
 
-
+//Create and append a new node to the end of the list
 void appendNode_H_T(struct Node** head, struct Node** tail, int value) {
     // Create a new node
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
@@ -55,6 +57,18 @@ void appendNode_H_T(struct Node** head, struct Node** tail, int value) {
     }
 }
 
+
+/**
+ * Using a BFS algorithm, it calculates the distance from a destination node to all nodes
+ *
+ * @param network A pointer to the network with loaded data.
+ * @param node The AS that serves as destination for the algorithm execution
+ * @param dist Vector with the distances of each node to the source node
+ * @param visited Vector with the visited nodes
+ * @param total_lengths Vector with the number of lengths in for each length
+ * @param total The total amount of paths
+ * @return void
+ */
 void bfs_shortestAll(struct net *network, int node, int *dist, int *visited, int *total_lengths, long *total) {
 
     struct Node* head = NULL; 
@@ -89,6 +103,13 @@ void bfs_shortestAll(struct net *network, int node, int *dist, int *visited, int
     }
 }
 
+
+/**
+ * Using a n*BFS algorithm, it calculates the lengths from all nodes to all nodes and prints the statistics
+ *
+ * @param network A pointer to the network with loaded data.
+ * @return void
+ */
 void ShortestAll(struct net *net) {
 
     int dist[MAX];
@@ -110,6 +131,7 @@ void ShortestAll(struct net *net) {
         }
     }
 
+    //Statistics
     double percentage;
     long total_count=total;
     for(int i=0;i<MAX;i++){
