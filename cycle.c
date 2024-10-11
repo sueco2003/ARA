@@ -68,6 +68,7 @@ void findStronglyConnectedComponentsUtil(struct net *network, int v) {
 
         // Only count the SCC if it has more than one node
         if (sccSize > 1) {
+            isCyclic = 1;
             sccCount++; // Increment SCC count only for cycles
         } else {
             // Reset the SCC ID for single-node SCC
@@ -128,11 +129,16 @@ void cycleRefactor(struct net *network) {
 
         for (int i = 0; i < MAX; i++) {
             if (sccId[i] == scc) {
+                printf("AS %d is part of a cycle and thus is being refactored into AS %d\n", i, superNodeId);
                 // Redirect all edges out of the SCC to the super node
-                const struct link *curr = network->adj[i];
+                struct link *curr = network->adj[i];
                 while (curr != NULL) {
                     if (sccId[curr->id] != scc) {
                         createEdge(network, superNodeId, curr->id, curr->type);
+                        struct link *temp = curr->next;
+                        removeEdge(network, i, curr->id); // Remove the original edge from the SCC node
+                        curr = temp;
+                        continue;
                     }
                     curr = curr->next;
                 }
@@ -140,15 +146,18 @@ void cycleRefactor(struct net *network) {
                 network->adj[i] = NULL;
             }
         }
-
+        printf("\n");
         // Redirect edges from other nodes into the super node
         for (int i = 0; i < MAX; i++) {
             if (sccId[i] != scc && network->adj[i] != NULL) {
-                const struct link *curr = network->adj[i];
+                struct link *curr = network->adj[i];
                 while (curr != NULL) {
                     if (sccId[curr->id] == scc) {
                         createEdge(network, i, superNodeId, curr->type);
-                        removeEdge(network, i, curr->id);
+                        struct link *temp = curr->next;
+                        removeEdge(network, i, curr->id); // Remove the original edge from the SCC node
+                        curr = temp;
+                        continue;
                     }
                     curr = curr->next;
                 }
@@ -156,3 +165,4 @@ void cycleRefactor(struct net *network) {
         }
     }
 }
+

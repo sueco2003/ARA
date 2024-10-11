@@ -20,14 +20,15 @@ int *Commercial(const struct net *network, const int start, int option) {
     for (int i = 0; i < MAX; i++) {
         parent[i] = -1;
     }
-
+    printf("isCyclic %d\n", isCyclic);
+    printf("isCo %d\n", isStronglyConnected);
     struct Node *list[3];
     list[0] = NULL, list[1] = NULL, list[2] = NULL;
     visitedLinkType[start] = -1; // Mark the start node as visited with link type -1
     parent[start] = -1; // Ver se vale a pena pois com os atalhos caminhos provider nao sao registados aqui!
     appendNode(list, start, visitedLinkType);
 
-    while (list[2]) {
+    while (list[2] || list[1] || list[0]) {
         const int currentVertex = removeNode(list);
         const struct link *temp = network->adj[currentVertex];
         while (temp) {
@@ -37,7 +38,7 @@ int *Commercial(const struct net *network, const int start, int option) {
                 if (type > visitedLinkType[adjV] && adjV != start) {
                     visitedLinkType[adjV] = type;
                     parent[adjV] = currentVertex;
-                    if (type == 3) {
+                    if (type == 3 || !isStronglyConnected) {
                         appendNode(list, adjV, visitedLinkType);
                     }
                 }
@@ -117,6 +118,7 @@ void appendNode(struct Node **head, int vertex, const int *visitedLinkType) {
     struct Node *newNode = malloc(sizeof(struct Node));
     newNode->data = vertex;
     newNode->next = NULL;
+    printf("vou ligar o no %d a fila %d\n", vertex, visitedLinkType[vertex]);
     // If the node should be added at the head[1] position
     if (visitedLinkType[vertex] == -1) {
         newNode->next = head[2]; // Link the new node to the existing head[1]
@@ -134,12 +136,14 @@ void appendNode(struct Node **head, int vertex, const int *visitedLinkType) {
  * @return Returns the first node on the queue, as an integer.
  */
 int removeNode(struct Node **list) {
-    if (list[2] != NULL) {
-        struct Node *temp = list[2];
-        const int AS = list[2]->data;
-        list[2] = list[2]->next;
-        free(temp);
-        return AS;
+    for (int i = 2; i >= 0; i--) {
+        if (list[i] != NULL) {
+            struct Node *temp = list[i];
+            const int AS = list[i]->data;
+            list[i] = list[i]->next;
+            free(temp);
+            return AS;
+        }
     }
     return -1; // Return -1 if no nodes are available to remove
 }

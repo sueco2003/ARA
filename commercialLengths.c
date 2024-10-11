@@ -4,21 +4,21 @@
 #include "header.h"
 
 struct MinHeapNode {
-    int node;      // The node number
-    int distance;  // The distance value
+    int node; // The node number
+    int distance; // The distance value
 };
 
 struct MinHeap {
-    struct MinHeapNode array[MAX];  // Static array to store the heap
-    int size;                       // Current size of the heap
-    int position[MAX];              // To store the index of each node in the heap
+    struct MinHeapNode array[MAX]; // Static array to store the heap
+    int size; // Current size of the heap
+    int position[MAX]; // To store the index of each node in the heap
 };
 
 // Function to initialize the heap
-void initializeMinHeap(struct MinHeap* minHeap) {
+void initializeMinHeap(struct MinHeap *minHeap) {
     minHeap->size = 0;
     for (int i = 0; i < MAX; i++) {
-        minHeap->position[i] = -1;  // Initially, no node is in the heap
+        minHeap->position[i] = -1; // Initially, no node is in the heap
     }
 }
 
@@ -32,7 +32,7 @@ int left(int i) { return (2 * i + 1); }
 int right(int i) { return (2 * i + 2); }
 
 // Function to swap nodes in the heap and update their positions
-void swapNodes(struct MinHeap* minHeap, int idx1, int idx2) {
+void swapNodes(struct MinHeap *minHeap, int idx1, int idx2) {
     struct MinHeapNode temp = minHeap->array[idx1];
     minHeap->array[idx1] = minHeap->array[idx2];
     minHeap->array[idx2] = temp;
@@ -43,10 +43,10 @@ void swapNodes(struct MinHeap* minHeap, int idx1, int idx2) {
 }
 
 // Function to heapify (bubble down) a subtree with root at index i
-void heapify(struct MinHeap* minHeap, int i) {
-    int smallest = i;      // Initialize smallest as root
-    int l = left(i);       // Left child
-    int r = right(i);      // Right child
+void heapify(struct MinHeap *minHeap, int i) {
+    int smallest = i; // Initialize smallest as root
+    int l = left(i); // Left child
+    int r = right(i); // Right child
 
     // Check if the left child is smaller than the root based on distance
     if (l < minHeap->size && minHeap->array[l].distance < minHeap->array[smallest].distance)
@@ -64,7 +64,7 @@ void heapify(struct MinHeap* minHeap, int i) {
 }
 
 // Function to bubble up (fix the min-heap property upwards)
-void bubbleUp(struct MinHeap* minHeap, int i) {
+void bubbleUp(struct MinHeap *minHeap, int i) {
     while (i != 0 && minHeap->array[parent(i)].distance > minHeap->array[i].distance) {
         swapNodes(minHeap, i, parent(i));
         i = parent(i);
@@ -72,32 +72,34 @@ void bubbleUp(struct MinHeap* minHeap, int i) {
 }
 
 // Function to extract the node with the minimum distance from the heap
-bool extractMin(struct MinHeap* minHeap, int *currentV) {
+bool extractMin(struct MinHeap *minHeap, int *currentV) {
     if (minHeap->size <= 0) {
+        // Return a dummy node with maximum distance if heap is empty
+
         return false;
     }
 
     if (minHeap->size == 1) {
         minHeap->size--;
-        (*currentV)=minHeap->array[0].node;
+        (*currentV) = minHeap->array[0].node;
         return true;
     }
 
     // Store the minimum value and remove it from the heap
     struct MinHeapNode root = minHeap->array[0];
     minHeap->array[0] = minHeap->array[minHeap->size - 1];
-    minHeap->position[minHeap->array[0].node] = 0; 
+    minHeap->position[minHeap->array[0].node] = 0;
     minHeap->size--;
 
     // Restore the heap property
     heapify(minHeap, 0);
 
-    (*currentV)= root.node;
+    (*currentV) = root.node;
     return true;
 }
 
 // Function to insert a new node and distance into the heap
-void insertKey(struct MinHeap* minHeap, int node, int distance) {
+void insertKey(struct MinHeap *minHeap, int node, int distance) {
     if (minHeap->size == MAX) {
         printf("Overflow: Could not insert key\n");
         return;
@@ -107,7 +109,7 @@ void insertKey(struct MinHeap* minHeap, int node, int distance) {
     int i = minHeap->size;
     minHeap->array[i].node = node;
     minHeap->array[i].distance = distance;
-    minHeap->position[node] = i;  // Track the position of this node in the heap
+    minHeap->position[node] = i; // Track the position of this node in the heap
     minHeap->size++;
 
     // Fix the min-heap property by "bubbling up"
@@ -115,8 +117,8 @@ void insertKey(struct MinHeap* minHeap, int node, int distance) {
 }
 
 // Function to decrease the distance of a node in the heap
-void decreaseKey(struct MinHeap* minHeap, int node, int newDistance) {
-    int i = minHeap->position[node];  // Get the index of the node in the heap
+void decreaseKey(struct MinHeap *minHeap, int node, int newDistance) {
+    int i = minHeap->position[node]; // Get the index of the node in the heap
 
     // If the new distance is greater, it's not a decrease-key operation
     if (newDistance > minHeap->array[i].distance) {
@@ -132,8 +134,8 @@ void decreaseKey(struct MinHeap* minHeap, int node, int newDistance) {
 }
 
 // Function to update the distance of a node (either increase or decrease)
-void updateKey(struct MinHeap* minHeap, int node, int newDistance) {
-    int i = minHeap->position[node];  // Get the index of the node in the heap
+void updateKey(struct MinHeap *minHeap, int node, int newDistance) {
+    int i = minHeap->position[node]; // Get the index of the node in the heap
 
     int currentDistance = minHeap->array[i].distance;
 
@@ -144,12 +146,12 @@ void updateKey(struct MinHeap* minHeap, int node, int newDistance) {
     // If the new distance is larger, bubble down
     else if (newDistance > currentDistance) {
         minHeap->array[i].distance = newDistance;
-        heapify(minHeap, i);  // Fix the heap by bubbling down
+        heapify(minHeap, i); // Fix the heap by bubbling down
     }
 }
 
 //Deletes a node from the heap
-void deleteNode(struct MinHeap* minHeap, int node) {
+void deleteNode(struct MinHeap *minHeap, int node) {
     // Get the index of the node to be deleted
     int i = minHeap->position[node];
 
@@ -162,7 +164,7 @@ void deleteNode(struct MinHeap* minHeap, int node) {
     // Replace the node with the last node in the heap
     minHeap->array[i] = minHeap->array[minHeap->size - 1];
     minHeap->position[minHeap->array[i].node] = i; // Update the position of the last node
-    minHeap->size--;  // Reduce the size of the heap
+    minHeap->size--; // Reduce the size of the heap
 
     // Update the position array to indicate that the node is no longer in the heap
     minHeap->position[node] = -1;
@@ -192,24 +194,23 @@ int isInvalidRoute(const int prevType, const int currentType) {
  * @return void
  */
 void dijkstra_lenght(struct net *graph, int src, long *dist, long *prev) {
-        
-    int type[MAX]; 
-    int processed[MAX];   
+    int type[MAX];
+    int processed[MAX];
 
-    struct MinHeap list_type1; 
-    struct MinHeap list_type2; 
-    struct MinHeap list_type3; 
+    struct MinHeap list_type1;
+    struct MinHeap list_type2;
+    struct MinHeap list_type3;
 
     initializeMinHeap(&list_type1);
     initializeMinHeap(&list_type2);
     initializeMinHeap(&list_type3);
 
     for (int i = 0; i < MAX; i++) {
-        if(graph->adj[i]!=NULL){
+        if (graph->adj[i] != NULL) {
             dist[i] = INF;
             type[i] = 0;
-            prev[i] =-1;
-            processed[i]=-1;
+            prev[i] = -1;
+            processed[i] = -1;
         }
     }
     dist[src] = 0;
@@ -217,93 +218,85 @@ void dijkstra_lenght(struct net *graph, int src, long *dist, long *prev) {
     insertKey(&list_type3, src, 0);
     int currentVertex;
 
-    while (list_type3.size != 0 || list_type2.size!=0 || list_type1.size!=0) {
+    while (list_type3.size != 0 || list_type2.size != 0 || list_type1.size != 0) {
         // Remove the first vertex from the list
-        if(!extractMin(&list_type3,&currentVertex)){
-            if(!extractMin(&list_type2,&currentVertex)){
-                extractMin(&list_type1,&currentVertex);
+        if (!extractMin(&list_type3, &currentVertex)) {
+            if (!extractMin(&list_type2, &currentVertex)) {
+                extractMin(&list_type1, &currentVertex);
             }
         }
         // Explore all the adjacent vertices
-        struct link* temp = graph->adj[currentVertex];
-        if(processed[currentVertex]==1){
+        struct link *temp = graph->adj[currentVertex];
+        if (processed[currentVertex] == 1) {
             continue;
         }
         while (temp) {
             int adjV = temp->id;
-            if(prev[currentVertex]==adjV){
+            if (prev[currentVertex] == adjV) {
                 temp = temp->next;
                 continue;
             }
-            if(!isInvalidRoute(type[currentVertex],temp->type)){
-                if (temp->type>type[adjV] && type[adjV]!=-1) {
-                    
-                    if(type[adjV]!=0){
-                        switch (type[adjV])
-                        {
-                        case 1:
-                            deleteNode(&list_type1, adjV);
-                            break;
-                        case 2:
-                            deleteNode(&list_type2, adjV);
-                            break;
-                        case 3:
-                            deleteNode(&list_type3, adjV);
-                            break;
-                        default:
-                            break;
+            if (!isInvalidRoute(type[currentVertex], temp->type)) {
+                if (temp->type > type[adjV] && type[adjV] != -1) {
+                    if (type[adjV] != 0) {
+                        switch (type[adjV]) {
+                            case 1:
+                                deleteNode(&list_type1, adjV);
+                                break;
+                            case 2:
+                                deleteNode(&list_type2, adjV);
+                                break;
+                            case 3:
+                                deleteNode(&list_type3, adjV);
+                                break;
+                            default:
+                                break;
                         }
                     }
 
                     type[adjV] = temp->type;
-                    dist[adjV] = dist[currentVertex] +1;
-                    prev[adjV]= currentVertex;
-                    
-                    switch (temp->type)
-                    {
-                    case 3:
-                        insertKey(&list_type3, adjV, dist[adjV]);
-                        break;
-                    case 2:
-                        insertKey(&list_type2, adjV, dist[adjV]);
-                        break;
-                    case 1:
-                        insertKey(&list_type1, adjV, dist[adjV]);
-                        break;
-                    
-                    default:
-                        break;
-                    }
-                }else if(temp->type==type[adjV] && dist[adjV]>dist[currentVertex]+1){
-                    dist[adjV]=dist[currentVertex]+1;
-                    prev[adjV]= currentVertex;
+                    dist[adjV] = dist[currentVertex] + 1;
+                    prev[adjV] = currentVertex;
 
-                    switch (temp->type)
-                    {
-                    case 1:
-                        updateKey(&list_type1, adjV, dist[adjV]);
-                        break;
-                    case 2:
-                        updateKey(&list_type2, adjV, dist[adjV]);
-                        break;
-                    case 3:
-                        updateKey(&list_type3, adjV, dist[adjV]);
-                        break;
-                    
-                    default:
-                        break;
+                    switch (temp->type) {
+                        case 3:
+                            insertKey(&list_type3, adjV, dist[adjV]);
+                            break;
+                        case 2:
+                            insertKey(&list_type2, adjV, dist[adjV]);
+                            break;
+                        case 1:
+                            insertKey(&list_type1, adjV, dist[adjV]);
+                            break;
+
+                        default:
+                            break;
                     }
-                    
+                } else if (temp->type == type[adjV] && dist[adjV] > dist[currentVertex] + 1) {
+                    dist[adjV] = dist[currentVertex] + 1;
+                    prev[adjV] = currentVertex;
+
+                    switch (temp->type) {
+                        case 1:
+                            updateKey(&list_type1, adjV, dist[adjV]);
+                            break;
+                        case 2:
+                            updateKey(&list_type2, adjV, dist[adjV]);
+                            break;
+                        case 3:
+                            updateKey(&list_type3, adjV, dist[adjV]);
+                            break;
+
+                        default:
+                            break;
+                    }
                 }
-
             }
             temp = temp->next;
         }
-        processed[currentVertex]=1;
+        processed[currentVertex] = 1;
     }
-
 }
-
 
 
 /**
@@ -314,35 +307,30 @@ void dijkstra_lenght(struct net *graph, int src, long *dist, long *prev) {
  * @return void
  */
 void CommercialLengths(struct net *net, int t) {
-
-
-    if(net->adj[t]==NULL){
-        printf("There is no destination %d\n",t);
+    if (net->adj[t] == NULL) {
+        printf("There is no destination %d\n", t);
         return;
     }
     long dist[MAX]={INF};
     long prev[MAX]={-1};
-    dijkstra_lenght(net, t, dist, prev);  
+    dijkstra_lenght(net, t, dist, prev);
     printf("Vertex   Distance from Source    Path\n");
     for (int i = 0; i < MAX; i++) {
-        if(net->adj[i]!=NULL){
-            if(dist[i]==INF){
+        if (net->adj[i] != NULL) {
+            if (dist[i] == INF) {
                 printf("%d \t\t Invalid \n", i);
-            }else{
+            } else {
                 printf("%d \t\t %ld \t\t ", i, dist[i]);
-                int node=i;
+                int node = i;
                 printf("%d", node);
-                while(prev[node]!=-1){
-                    node=prev[node];
+                while (prev[node] != -1) {
+                    node = prev[node];
                     printf("-%d", node);
                 }
                 printf("\n");
             }
-            
         }
-        
     }
-
 }
 
 /**
@@ -353,44 +341,42 @@ void CommercialLengths(struct net *net, int t) {
  * @return void
  */
 void CommercialLengthsTest(struct net *net, int t) {
-
-    if(net->adj[t]==NULL){
-        printf("There is no destination %d\n",t);
+    if (net->adj[t] == NULL) {
+        printf("There is no destination %d\n", t);
         return;
     }
     long dist[MAX]={INF};
     long prev[MAX]={-1};
     dijkstra_lenght(net, t, dist, prev);
 
-    int s=0;
-    while(1){
+    int s = 0;
+    while (1) {
         printf("Please insert the source AS or -1 to exit:\n");
         if (fscanf(stdin, "%d", &s) != 1) {
             printf("Please provide the input needed!\n");
-        }else{
-            if(s==-1){
+        } else {
+            if (s == -1) {
                 break;
             }
-            if(net->adj[s]==NULL){
-                printf("%d is not a source\n",s);
+            if (net->adj[s] == NULL) {
+                printf("%d is not a source\n", s);
                 continue;
             }
             printf("Vertex   Distance from Source    Path\n");
-            if(dist[s]==INF){
+            if (dist[s] == INF) {
                 printf("%d \t\t Invalid \n", s);
-            }else{
+            } else {
                 printf("%d \t\t %ld \t\t ", s, dist[s]);
-                int node=s;
+                int node = s;
                 printf("%d", node);
-                while(prev[node]!=-1){
-                    node=prev[node];
+                while (prev[node] != -1) {
+                    node = prev[node];
                     printf("-%d", node);
                 }
                 printf("\n");
             }
         }
     }
-
 }
 
 
@@ -401,15 +387,15 @@ void CommercialLengthsTest(struct net *net, int t) {
  * @return void
  */
 void CommercialLengthsAll(struct net *net) {
-    long total_lengths[MAX]={0};
-    long total_count=0;
-    long dist[MAX]={INF};
-    long prev[MAX]={-1};
-    long max_length=0;
-    int count = 0; 
+    long total_lengths[MAX] = {0};
+    long total_count = 0;
+    long dist[MAX] = {INF};
+    long prev[MAX] = {-1};
+    long max_length = 0;
+    int count = 0;
     int progress = 10;
-    for(int i=0;i<MAX;i++){
-        if(net->adj[i]!=NULL){
+    for (int i = 0; i < MAX; i++) {
+        if (net->adj[i] != NULL) {
             dijkstra_lenght(net, i, dist, prev);
             count++;
             if ((100 * count / net->V) >= progress) {
@@ -417,30 +403,26 @@ void CommercialLengthsAll(struct net *net) {
                 progress += 10; // Move to the next progress level (20%, 30%, etc.)
             }
             for (int j = 0; j < MAX; j++) {
-                if (dist[j] != INF && dist[j] != 0) {  // Exclude unreachable nodes and the source itself
+                if (dist[j] != INF && dist[j] != 0) {
+                    // Exclude unreachable nodes and the source itself
                     int length = dist[j];
                     total_lengths[length]++;
                     total_count++;
-                    if(max_length<length){
-                        max_length=length;
+                    if (max_length < length) {
+                        max_length = length;
                     }
                 }
             }
-            
-        } 
+        }
     }
-    //Statistics
+//Statistics
     double ccdf;
-    long total=total_count;
-    for(int i=1;i<=max_length;i++){
-        if(total_lengths[i]!=0){
-            total=total-total_lengths[i];
-            ccdf = ((float)total / (float)total_count)*100;
+    long total = total_count;
+    for (int i = 1; i <= max_length; i++) {
+        if (total_lengths[i] != 0) {
+            total = total - total_lengths[i];
+            ccdf = ((float) total / (float) total_count) * 100;
             printf("Length: %d, CCDF: %.6f%%, Amount: %ld\n", i, ccdf, total_lengths[i]);
         }
-        
     }
-    
-
-    
 }
