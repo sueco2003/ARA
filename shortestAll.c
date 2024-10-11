@@ -96,9 +96,16 @@ void ShortestAll(struct net *net) {
     int total_lengths[MAX]={0};
     long total=0;
 
+    int count = 0; 
+    int progress = 10;
+
     for(int i=0; i<MAX;i++){
         if(net->adj[i]!=NULL){
-            printf("%d\n",i);
+            count++;
+            if ((100 * count / net->V) >= progress) {
+                printf("%d%% of vertices processed\n", progress);
+                progress += 10; // Move to the next progress level (20%, 30%, etc.)
+            }
             bfs_shortestAll(net, i, dist, visited,total_lengths,&total);
         }
     }

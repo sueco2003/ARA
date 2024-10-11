@@ -330,6 +330,10 @@ void CommercialLengths(struct net *net, int t) {
 
 void CommercialLengthsTest(struct net *net, int t) {
 
+    if(net->adj[t]==NULL){
+        printf("There is no destination %d\n",t);
+        return;
+    }
     long dist[MAX];
     long prev[MAX];
     dijkstra_lenght(net, t, dist, prev);
@@ -342,6 +346,10 @@ void CommercialLengthsTest(struct net *net, int t) {
         }else{
             if(s==-1){
                 break;
+            }
+            if(net->adj[s]==NULL){
+                printf("%d is not a source\n",s);
+                continue;
             }
             printf("Vertex   Distance from Source    Path\n");
             if(dist[s]==INF){
@@ -367,11 +375,16 @@ void CommercialLengthsAll(struct net *net) {
     long dist[MAX];
     long prev[MAX];
     long max_length=0;
+    int count = 0; 
+    int progress = 10;
     for(int i=0;i<MAX;i++){
         if(net->adj[i]!=NULL){
-            printf("%d\n",i);
             dijkstra_lenght(net, i, dist, prev);
-            
+            count++;
+            if ((100 * count / net->V) >= progress) {
+                printf("%d%% of vertices processed\n", progress);
+                progress += 10; // Move to the next progress level (20%, 30%, etc.)
+            }
             for (int j = 0; j < MAX; j++) {
                 if (dist[j] != INF && dist[j] != 0) {  // Exclude unreachable nodes and the source itself
                     int length = dist[j];
